@@ -4,9 +4,9 @@
 #include <utility>
 
 struct process {
-	std::string name;
+	char name;
 	int arrival;
 	std::vector<std::pair<int, int>> CPU_bursts;
-} process;
+};
 
 #endif
