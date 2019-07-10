@@ -10,16 +10,18 @@
 #include "SRT.h"
 #include "RR.h"
 
-void getTimes(int seed, double lambda, int upper_bound, process *proc){
+std::vector<process> getTimes(int num_processes, int seed, double lambda, int upper_bound){
   srand48(seed);
-  double r = drand48();
-  double x = -log( r ) / lambda;
-  while(x > upper_bound){
-    r = drand48();
-    x =  -log( r ) / lambda;
-  }
-  proc.arrival = 
-  int num_bursts = drand48() % 100; 
+  for(int i=0; i<num_processes;i++){
+    process temp;
+    temp.name = "A" + i;
+    double r = drand48();
+    int num_bursts = r % 100;
+    std::vector<std::pair<int, int>> burst_times;
+    for(int j=0; j<num_bursts;j++){
+
+    }
+  } 
 }
 
 struct process {
