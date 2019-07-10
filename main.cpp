@@ -5,6 +5,10 @@
 #include <utility>
 #include <math.h>
 #include <map>
+#include "FCFS.h"
+#include "SJF.h"
+#include "SRT.h"
+#include "RR.h"
 
 void getTimes(int seed, double lambda, int upper_bound, process *proc){
   srand48(seed);
