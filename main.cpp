@@ -5,16 +5,11 @@
 #include <utility>
 #include <math.h>
 #include <map>
+#include "process.h"
 #include "FCFS.h"
 #include "SJF.h"
 #include "SRT.h"
 #include "RR.h"
-
-struct process {
-	std::string name;
-	int arrival;
-	std::vector<std::pair<int, int>> CPU_bursts;
-} process;
 
 int main(int argc, char const *argv[]) {
 	if (argc != 8 && argc != 9) {
