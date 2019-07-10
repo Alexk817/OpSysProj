@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]) {
 	int time_context_switch = atoi(argv[5]);
 	int alpha = atoi(argv[6]);
 	int time_slice = atoi(argv[7]);
-	std::string rr_add;
+	std::string rr_add = "END";
 	if (argc == 9) {
 		rr_add = argv[8];
 	}
