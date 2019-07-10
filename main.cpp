@@ -5,6 +5,14 @@
 #include <math.h>
 #include <map>
 
+struct process {
+	std::string name;
+	int arrival;
+	int num_bursts;
+	int actual_burst;
+	int IO_burst;
+} process;
+
 int main(int argc, char const *argv[]) {
 	if (argc != 8 && argc != 9) {
 		std::cerr << "Invalid number of argument" << std::endl;
