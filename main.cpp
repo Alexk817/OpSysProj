@@ -6,10 +6,15 @@
 #include <math.h>
 #include <map>
 
-void getTimes(int seed, double lambda){
+void getTimes(int seed, double lambda, int upper_bound, process *proc){
   srand48(seed);
-  arrival time = drand48();
+  double r = drand48();
   double x = -log( r ) / lambda;
+  while(x > upper_bound){
+    r = drand48();
+    x =  -log( r ) / lambda;
+  }
+  proc.arrival = 
   int num_bursts = drand48() % 100; 
 }
 
