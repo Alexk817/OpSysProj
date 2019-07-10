@@ -2,8 +2,15 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <utility>
 #include <math.h>
 #include <map>
+
+struct process {
+	std::string name;
+	int arrival;
+	std::vector<std::pair<int, int>> CPU_bursts;
+} process;
 
 int main(int argc, char const *argv[]) {
 	if (argc != 8 && argc != 9) {
