@@ -5,6 +5,14 @@
 #include <math.h>
 #include <map>
 
+void getTimes(int seed, double lambda){
+  srand48(seed);
+  arrival time = drand48();
+  double x = -log( r ) / lambda;
+  int num_bursts = drand48() % 100; 
+}
+
+
 int main(int argc, char const *argv[]) {
 	if (argc != 8 && argc != 9) {
 		std::cerr << "Invalid number of argument" << std::endl;
