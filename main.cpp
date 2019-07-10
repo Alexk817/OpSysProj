@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <utility>
 #include <math.h>
 #include <map>
 
@@ -12,6 +13,11 @@ void getTimes(int seed, double lambda){
   int num_bursts = drand48() % 100; 
 }
 
+struct process {
+	std::string name;
+	int arrival;
+	std::vector<std::pair<int, int>> CPU_bursts;
+} process;
 
 int main(int argc, char const *argv[]) {
 	if (argc != 8 && argc != 9) {
