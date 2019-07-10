@@ -3,9 +3,9 @@
 #include <string>
 #include <vector>
 #include <math.h>
+#include <map>
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
 	if (argc != 8 && argc != 9) {
 		std::cerr << "Invalid number of argument" << std::endl;
 		return EXIT_FAILURE;
@@ -14,6 +14,10 @@ int main(int argc, char const *argv[])
 	double lambda = atof(argv[2]);
 	int upper_bound = atoi(argv[3]);
 	int num_processes = atoi(argv[4]);
+	if (num_processes > 26) {
+		std::cerr << "Number of processes must be less than or equal to 26" << std::endl;
+		return EXIT_FAILURE;
+	}
 	int time_context_switch = atoi(argv[5]);
 	int alpha = atoi(argv[6]);
 	int time_slice = atoi(argv[7]);
@@ -21,8 +25,5 @@ int main(int argc, char const *argv[])
 	if (argc == 9) {
 		rr_add = argv[8];
 	}
-
-	pseudoRandom();
-	
 	return EXIT_SUCCESS;
 }
