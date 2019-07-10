@@ -5,6 +5,10 @@
 #include <utility>
 #include <math.h>
 #include <map>
+#include "FCFS.h"
+#include "SJF.h"
+#include "SRT.h"
+#include "RR.h"
 
 struct process {
 	std::string name;
