@@ -5,26 +5,26 @@
 #include <utility>
 #include <math.h>
 #include <map>
-#include "process.h"
+#include "Process.h"
 #include "FCFS.h"
 #include "SJF.h"
 #include "SRT.h"
 #include "RR.h"
 
-std::vector<process> getTimes(int num_processes, int seed, double lambda, int upper_bound){
+std::vector<Process> getTimes(int num_processes, int seed, double lambda, int upper_bound){
   srand48(seed);
   double r,x;
-  std::vector<process> processes;
+  std::vector<Process> processes;
+  char name;
   for(int i=0; i<num_processes;i++){
-    process temp;
-    temp.name = 'A' + i;
+    name = 'A' + i;
     r = drand48();
     x = -log( r ) / lambda;
     while(x > upper_bound){
       r = drand48();
       x = -log( r ) / lambda;  
     }
-    temp.arrival = floor(x);
+    int arrival = floor(x);
     r = drand48();
     int num_bursts = floor(r * 100);
     std::vector<std::pair<int, int>> burst_times;
@@ -46,7 +46,7 @@ std::vector<process> getTimes(int num_processes, int seed, double lambda, int up
       temp_pair.second = ceil(x);
       burst_times.push_back(temp_pair);
     }
-    temp.CPU_bursts = burst_times;
+    Process temp(name, arrival, burst_times);
     processes.push_back(temp);
   }
 
@@ -73,10 +73,6 @@ int main(int argc, char const *argv[]) {
 	if (argc == 9) {
 		rr_add = argv[8];
 	}
-
-  std::vector<process> test = getTimes(2, 5, .001, 3000);
-  std::cout << test[0].name << ": " << test[0].arrival << "\n";
-  std::cout << test[1].name << ": " << test[1].arrival << "\n";
 
 	return EXIT_SUCCESS;
 }
