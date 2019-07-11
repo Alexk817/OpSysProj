@@ -2,6 +2,7 @@
 #define __Process_h__
 #include <vector>
 #include <utility>
+#include <stdlib.h>
 
 class Process {
 public:
@@ -9,11 +10,14 @@ public:
     char getName() const;
     int getArrival() const;
     std::vector<std::pair<int, int>> getCPUBursts() const;
+    std::string getStatus() const;
+    void setStatus(std::string newStatus);
 
 private:
     char name;
     int arrival;
     std::vector<std::pair<int, int>> CPU_bursts;
+    std::string status;
 };
 
 #endif
