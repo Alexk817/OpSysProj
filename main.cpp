@@ -10,7 +10,7 @@
 #include "FCFS.h"
 #include "SJF.h"
 #include "SRT.h"
-#include "RR.h" 
+#include "RR.h"
 
 std::vector<Process> getTimes(int num_processes, int seed, double lambda, int upper_bound) {
   srand48(seed);
