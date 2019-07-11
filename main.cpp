@@ -28,7 +28,7 @@ std::vector<Process> getTimes(int num_processes, int seed, double lambda, int up
     int arrival = floor(x);
     r = drand48();
     int num_bursts = floor(r * 100);
-    std::vector<std::pair<int, int>> burst_times;
+    std::vector<std::pair<int, int> > burst_times;
     for(int j = 0; j < num_bursts; j++) {
       std::pair<int, int> temp_pair;
       r = drand48();
@@ -72,7 +72,10 @@ int main(int argc, char const *argv[]) {
 	int time_slice = atoi(argv[7]);
 	std::string rr_add = "END";
 	if (argc == 9) {
-		rr_add = argv[8];
+		if (std::string(argv[8]).compare( "BEGINNING") && std::string(argv[8]).compare( "END")){
+			std::cerr << "ERROR: INVALID READY QUE OPTION\nCORRECT USAGE: [BEGINNING | END]" << std::endl;
+		}
+		rr_add = std::string(argv[8]);
 	}
 	
 	return EXIT_SUCCESS;

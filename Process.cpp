@@ -2,8 +2,9 @@
 #include <utility>
 #include <stdlib.h>
 #include "Process.h"
+#include <string>
 
-Process::Process(char aName, int aArrival, std::vector<std::pair<int, int>> aCPUBursts) {
+Process::Process(char aName, int aArrival, std::vector<std::pair<int, int> > aCPUBursts) {
     name = aName;
     arrival = aArrival;
     CPU_bursts = aCPUBursts;
@@ -18,7 +19,7 @@ int Process::getArrival() const {
 	return arrival;
 }
 
-std::vector<std::pair<int, int>> Process::getCPUBursts() const {
+std::vector<std::pair<int, int> > Process::getCPUBursts() const {
     return CPU_bursts;
 }
 
