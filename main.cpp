@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -73,6 +74,6 @@ int main(int argc, char const *argv[]) {
 	if (argc == 9) {
 		rr_add = argv[8];
 	}
-
+	
 	return EXIT_SUCCESS;
 }
