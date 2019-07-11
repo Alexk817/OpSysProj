@@ -17,7 +17,7 @@ std::vector<Process> getTimes(int num_processes, int seed, double lambda, int up
   double r,x;
   std::vector<Process> processes;
   char name;
-  for(int i=0; i<num_processes;i++) {
+  for(int i = 0; i < num_processes; i++) {
     name = 'A' + i;
     r = drand48();
     x = -log( r ) / lambda;
@@ -29,7 +29,7 @@ std::vector<Process> getTimes(int num_processes, int seed, double lambda, int up
     r = drand48();
     int num_bursts = floor(r * 100);
     std::vector<std::pair<int, int>> burst_times;
-    for(int j=0; j<num_bursts;j++) {
+    for(int j = 0; j < num_bursts; j++) {
       std::pair<int, int> temp_pair;
       r = drand48();
       x = -log( r ) / lambda;
