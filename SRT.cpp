@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <stdlib.h>
-#include "Taufunc.h"
+#include "helper.h"
 
 void SRT(std::vector<Process> Processes) {
 	//current time

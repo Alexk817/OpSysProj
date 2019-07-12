@@ -6,9 +6,10 @@
 #include <utility>
 #include <math.h>
 #include <map>
+#include <iomanip>
 #include "Process.h"
 #include "CPUScheduling.h"
-#include "Taufunc.h"
+#include "helper.h"
 
 /* 
 	Generate a vector of processes that the CPU scheduling algorithms with use
@@ -58,8 +59,16 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 		Process temp(name, arrival, burst_times,ceil(1/lambda));
 		processes.push_back(temp);
 	}
-
 	return processes;
+}
+
+void finalOutput(std::ofstream simout, std::vector<double> data, std::string algo) {
+  simout << "Algorithm " << algo << std::endl;
+  simout << "-- average CPU burst time: " << data[0] << " ms" << std::endl;
+  simout << "-- average wait time: " << data[1] << " ms" << std::endl;
+  simout << "-- average turnaround time: " << data[2] << " ms" << std::endl;
+  simout << "-- total number of context switches: " << int(data[3]) << std::endl;
+  simout << "-- total number of preemptions: " << int(data[4]) << std::endl;
 }
 
 int main(int argc, char const *argv[]) {
@@ -90,6 +99,12 @@ int main(int argc, char const *argv[]) {
 		}
 		rr_add = std::string(argv[8]);
 	}
+
+
+  // Outputting to the simout.txt file
+  std::ofstream simout;
+  simout.open("simout.txt");
+  simout.close();
 	
 	return EXIT_SUCCESS;
 }

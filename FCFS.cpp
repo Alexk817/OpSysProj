@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <stdlib.h>
-#include "Taufunc.h"
+#include "helper.h"
 
 void printEvent(int time, std::string detail, std::vector<Process> que){
     std::cout << time << "ms: " << detail << " [Q";
