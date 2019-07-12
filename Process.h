@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string>
 
+/* This class represents process that the CPU will run */
 class Process {
 public:
     Process(char aName, int aArrival, std::vector<std::pair<int, int> > aCPUBursts);

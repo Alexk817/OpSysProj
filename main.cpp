@@ -7,12 +7,14 @@
 #include <math.h>
 #include <map>
 #include "Process.h"
-#include "FCFS.h"
-#include "SJF.h"
-#include "SRT.h"
-#include "RR.h"
+#include "CPUScheduling.h"
 
-std::vector<Process> getTimes(int num_processes, int seed, double lambda, int upper_bound) {
+/* 
+  Generate a vector of processes that the CPU scheduling algorithms with use
+  Each process with have a vector of CPU Bursts of size 1-100
+  Each Burst will have a CPU Burst time and IO Burst time 
+*/
+std::vector<Process> generateProcesses(int num_processes, int seed, double lambda, int upper_bound) {
   srand48(seed);
   double r,x;
   std::vector<Process> processes;
@@ -55,6 +57,7 @@ std::vector<Process> getTimes(int num_processes, int seed, double lambda, int up
 }
 
 int main(int argc, char const *argv[]) {
+  // Reading in Arguments
 	if (argc != 8 && argc != 9) {
 		std::cerr << "Invalid number of argument" << std::endl;
 		return EXIT_FAILURE;
@@ -68,7 +71,7 @@ int main(int argc, char const *argv[]) {
 		return EXIT_FAILURE;
 	}
 	int time_context_switch = atoi(argv[5]);
-	int alpha = atoi(argv[6]);
+	double alpha = atof(argv[6]);
 	int time_slice = atoi(argv[7]);
 	std::string rr_add = "END";
 	if (argc == 9) {
