@@ -1,4 +1,4 @@
-#include "SJF.h"
+#include "CPUScheduling.h"
 #include "process.h"
 #include <iostream>
 #include <fstream>
