@@ -66,38 +66,13 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 	return processes;
 }
 
-void finalOutput(std::vector<double> fcfs_values, std::vector<double> sjf_values, std::vector<double> srt_values, std::vector<double> rr_values) {
-  std::ofstream simout;
-  simout.open("simout.txt");
-  simout << std::fixed << std::setprecision(3);
-
-  simout << "Algorithm FCFS" << std::endl;
-  simout << "-- average CPU burst time: " << fcfs_values[0] << " ms" << std::endl;
-  simout << "-- average wait time: " << fcfs_values[1] << " ms" << std::endl;
-  simout << "-- average turnaround time: " << fcfs_values[2] << " ms" << std::endl;
-  simout << "-- total number of context switches: " << int(fcfs_values[3]) << std::endl;
-  simout << "-- total number of preemptions: " << int(fcfs_values[4]) << std::endl;
-
-  simout << "Algorithm SJF" << std::endl;
-  simout << "-- average CPU burst time: " << sjf_values[0] << " ms" << std::endl;
-  simout << "-- average wait time: " << sjf_values[1] << " ms" << std::endl;
-  simout << "-- average turnaround time: " << sjf_values[2] << " ms" << std::endl;
-  simout << "-- total number of context switches: " << int(sjf_values[3]) << std::endl;
-  simout << "-- total number of preemptions: " << int(sjf_values[4]) << std::endl;
-
-  simout << "Algorithm SRT" << std::endl;
-  simout << "-- average CPU burst time: " << srt_values[0] << " ms" << std::endl;
-  simout << "-- average wait time: " << srt_values[1] << " ms" << std::endl;
-  simout << "-- average turnaround time: " << srt_values[2] << " ms" << std::endl;
-  simout << "-- total number of context switches: " << int(srt_values[3]) << std::endl;
-  simout << "-- total number of preemptions: " << int(srt_values[4]) << std::endl;
-
-  simout << "Algorithm RR" << std::endl;
-  simout << "-- average CPU burst time: " << rr_values[0] << " ms" << std::endl;
-  simout << "-- average wait time: " << rr_values[1] << " ms" << std::endl;
-  simout << "-- average turnaround time: " << rr_values[2] << " ms" << std::endl;
-  simout << "-- total number of context switches: " << int(rr_values[3]) << std::endl;
-  simout << "-- total number of preemptions: " << int(rr_values[4]) << std::endl;
+void finalOutput(std::ofstream simout, std::vector<double> data, std::string algo) {
+  simout << "Algorithm " << algo << std::endl;
+  simout << "-- average CPU burst time: " << data[0] << " ms" << std::endl;
+  simout << "-- average wait time: " << data[1] << " ms" << std::endl;
+  simout << "-- average turnaround time: " << data[2] << " ms" << std::endl;
+  simout << "-- total number of context switches: " << int(data[3]) << std::endl;
+  simout << "-- total number of preemptions: " << int(data[4]) << std::endl;
 }
 
 int main(int argc, char const *argv[]) {
@@ -128,6 +103,12 @@ int main(int argc, char const *argv[]) {
 		}
 		rr_add = std::string(argv[8]);
 	}
+
+
+  // Outputting to the simout.txt file
+  std::ofstream simout;
+  simout.open("simout.txt");
+  simout.close();
 	
 	std::vector<Process> test = generateProcesses(2, 5, .001, 3000);
   std::cout << test[0].name << ": " << test[0].arrival << "\n";
