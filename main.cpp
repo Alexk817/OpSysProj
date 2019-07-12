@@ -15,7 +15,7 @@
 /* 
   Generate a vector of processes that the CPU scheduling algorithms with use
   Each process with have a vector of CPU Bursts of size 1-100
-  Each Burst will have a CPU Burst time and IO Burst time 
+  Each Burst will have a CPU Burst time and IO Burst time
 */
 std::vector<Process> generateProcesses(int num_processes, int seed, double lambda, int upper_bound) {
   srand48(seed);
