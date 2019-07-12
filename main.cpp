@@ -6,6 +6,7 @@
 #include <utility>
 #include <math.h>
 #include <map>
+#include <iomanip>
 #include "Process.h"
 #include "CPUScheduling.h"
 #include "helper.h"
@@ -58,8 +59,41 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 		Process temp(name, arrival, burst_times,ceil(1/lambda));
 		processes.push_back(temp);
 	}
-
 	return processes;
+}
+
+void finalOutput(std::vector<double> fcfs_values, std::vector<double> sjf_values, std::vector<double> srt_values, std::vector<double> rr_values) {
+  std::ofstream simout;
+  simout.open("simout.txt");
+  simout << std::fixed << std::setprecision(3);
+
+  simout << "Algorithm FCFS" << std::endl;
+  simout << "-- average CPU burst time: " << fcfs_values[0] << " ms" << std::endl;
+  simout << "-- average wait time: " << fcfs_values[1] << " ms" << std::endl;
+  simout << "-- average turnaround time: " << fcfs_values[2] << " ms" << std::endl;
+  simout << "-- total number of context switches: " << int(fcfs_values[3]) << std::endl;
+  simout << "-- total number of preemptions: " << int(fcfs_values[4]) << std::endl;
+
+  simout << "Algorithm SJF" << std::endl;
+  simout << "-- average CPU burst time: " << sjf_values[0] << " ms" << std::endl;
+  simout << "-- average wait time: " << sjf_values[1] << " ms" << std::endl;
+  simout << "-- average turnaround time: " << sjf_values[2] << " ms" << std::endl;
+  simout << "-- total number of context switches: " << int(sjf_values[3]) << std::endl;
+  simout << "-- total number of preemptions: " << int(sjf_values[4]) << std::endl;
+
+  simout << "Algorithm SRT" << std::endl;
+  simout << "-- average CPU burst time: " << srt_values[0] << " ms" << std::endl;
+  simout << "-- average wait time: " << srt_values[1] << " ms" << std::endl;
+  simout << "-- average turnaround time: " << srt_values[2] << " ms" << std::endl;
+  simout << "-- total number of context switches: " << int(srt_values[3]) << std::endl;
+  simout << "-- total number of preemptions: " << int(srt_values[4]) << std::endl;
+
+  simout << "Algorithm RR" << std::endl;
+  simout << "-- average CPU burst time: " << rr_values[0] << " ms" << std::endl;
+  simout << "-- average wait time: " << rr_values[1] << " ms" << std::endl;
+  simout << "-- average turnaround time: " << rr_values[2] << " ms" << std::endl;
+  simout << "-- total number of context switches: " << int(rr_values[3]) << std::endl;
+  simout << "-- total number of preemptions: " << int(rr_values[4]) << std::endl;
 }
 
 int main(int argc, char const *argv[]) {
