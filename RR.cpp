@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <stdlib.h>
+#include "Taufunc.h"
 
 void RR() {
 
