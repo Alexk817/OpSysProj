@@ -8,6 +8,7 @@
 #include <map>
 #include "Process.h"
 #include "CPUScheduling.h"
+#include "Taufunc.h"
 
 /* 
   Generate a vector of processes that the CPU scheduling algorithms with use
