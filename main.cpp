@@ -49,7 +49,7 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
       temp_pair.second = ceil(x);
       burst_times.push_back(temp_pair);
     }
-    Process temp(name, arrival, burst_times);
+    Process temp(name, arrival, burst_times,ceil(1/lambda));
     processes.push_back(temp);
   }
 
