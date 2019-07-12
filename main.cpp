@@ -7,10 +7,7 @@
 #include <math.h>
 #include <map>
 #include "Process.h"
-#include "FCFS.h"
-#include "SJF.h"
-#include "SRT.h"
-#include "RR.h"
+#include "CPUScheduling.h"
 
 /* 
   Generate a vector of processes that the CPU scheduling algorithms with use
@@ -74,7 +71,7 @@ int main(int argc, char const *argv[]) {
 		return EXIT_FAILURE;
 	}
 	int time_context_switch = atoi(argv[5]);
-	int alpha = atoi(argv[6]);
+	double alpha = atof(argv[6]);
 	int time_slice = atoi(argv[7]);
 	std::string rr_add = "END";
 	if (argc == 9) {
