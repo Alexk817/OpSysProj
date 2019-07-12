@@ -1,16 +1,58 @@
 #include <iostream>
+#include <stdlib.h>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <utility>
 #include <math.h>
 #include <map>
+#include "Process.h"
+#include "FCFS.h"
+#include "SJF.h"
+#include "SRT.h"
+#include "RR.h"
 
-struct process {
-	std::string name;
-	int arrival;
-	std::vector<std::pair<int, int>> CPU_bursts;
-} process;
+std::vector<Process> getTimes(int num_processes, int seed, double lambda, int upper_bound) {
+  srand48(seed);
+  double r,x;
+  std::vector<Process> processes;
+  char name;
+  for(int i = 0; i < num_processes; i++) {
+    name = 'A' + i;
+    r = drand48();
+    x = -log( r ) / lambda;
+    while(x > upper_bound) {
+      r = drand48();
+      x = -log( r ) / lambda;  
+    }
+    int arrival = floor(x);
+    r = drand48();
+    int num_bursts = floor(r * 100);
+    std::vector<std::pair<int, int> > burst_times;
+    for(int j = 0; j < num_bursts; j++) {
+      std::pair<int, int> temp_pair;
+      r = drand48();
+      x = -log( r ) / lambda;
+      while(x > upper_bound) {
+        r = drand48();
+        x = -log( r ) / lambda;  
+      }
+      temp_pair.first = ceil(x);
+      r = drand48();
+      x = -log( r ) / lambda;
+      while(x > upper_bound) {
+        r = drand48();
+        x = -log( r ) / lambda;  
+      }
+      temp_pair.second = ceil(x);
+      burst_times.push_back(temp_pair);
+    }
+    Process temp(name, arrival, burst_times);
+    processes.push_back(temp);
+  }
+
+  return processes;
+}
 
 int main(int argc, char const *argv[]) {
 	if (argc != 8 && argc != 9) {
@@ -30,7 +72,11 @@ int main(int argc, char const *argv[]) {
 	int time_slice = atoi(argv[7]);
 	std::string rr_add = "END";
 	if (argc == 9) {
-		rr_add = argv[8];
+		if (std::string(argv[8]).compare( "BEGINNING") && std::string(argv[8]).compare( "END")){
+			std::cerr << "ERROR: INVALID READY QUE OPTION\nCORRECT USAGE: [BEGINNING | END]" << std::endl;
+		}
+		rr_add = std::string(argv[8]);
 	}
+	
 	return EXIT_SUCCESS;
 }

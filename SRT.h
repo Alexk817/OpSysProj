@@ -1,4 +1,3 @@
-#include "FCFS.h"
 #include "process.h"
 #include <iostream>
 #include <fstream>
@@ -6,6 +5,5 @@
 #include <vector>
 #include <stdlib.h>
 
-void FCFS() {
-
-}
+/* Will be the Shortest Remaining Time CPU scheduling algorithm */
+void SRT();
