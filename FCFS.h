@@ -5,4 +5,5 @@
 #include <vector>
 #include <stdlib.h>
 
+/* Will be the First Come First Serve CPU scheduling algorithm */
 void FCFS();
