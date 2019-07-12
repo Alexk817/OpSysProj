@@ -11,6 +11,7 @@
 #include "SRT.h"
 #include "RR.h"
 
+// Creates the processes with random number 1-100 bursts, and random times for cpu bursts and I/O bursts
 std::vector<Process> getTimes(int num_processes, int seed, double lambda, int upper_bound){
   srand48(seed);
   double r,x;
