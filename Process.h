@@ -12,6 +12,7 @@ public:
     char name;
     int arrival;
     int end;
+    int burst_num;
     std::vector<std::pair<int, int> > CPU_bursts;
     std::string status;
     int tau;
