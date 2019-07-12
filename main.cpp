@@ -72,6 +72,10 @@ int main(int argc, char const *argv[]) {
 		return EXIT_FAILURE;
 	}
 	int time_context_switch = atoi(argv[5]);
+  if (time_context_switch % 2 != 0) {
+    std::cerr << "Context Switch Time needs to be an even number" << std::endl;
+		return EXIT_FAILURE;
+  }
 	double alpha = atof(argv[6]);
 	int time_slice = atoi(argv[7]);
 	std::string rr_add = "END";
