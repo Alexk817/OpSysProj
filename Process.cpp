@@ -9,7 +9,7 @@ Process::Process(char aName, int aArrival, std::vector<std::pair<int, int> > aCP
     arrival = aArrival;
     CPU_bursts = aCPUBursts;
     status = "READY";
-    tau = initTau
+    tau = initTau;
 }
 
 char Process::getName() const {

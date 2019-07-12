@@ -6,6 +6,6 @@
 #include <vector>
 #include <stdlib.h>
 
-void SRT() {
-
+void SRT(std::vector<Process> Processes) {
+	
 }
