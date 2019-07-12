@@ -5,4 +5,5 @@
 #include <vector>
 #include <stdlib.h>
 
+/* Will be the Shortest Job First CPU scheduling algorithm */
 void SJF();
