@@ -1,3 +1,5 @@
+#ifndef __Taufunc_h__
+#define __Taufunc_h__
 #include "process.h"
 #include <iostream>
 #include <fstream>
@@ -10,3 +12,6 @@
 int tauGuess(int lastTau, float alpha, int lastTime){
 	return std::ceil(alpha * lastTime + (1-alpha) * lastTau);
 }
+
+
+#endif

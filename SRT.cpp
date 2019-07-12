@@ -7,6 +7,6 @@
 #include <stdlib.h>
 #include "Taufunc.h"
 
-void SRT() {
-
+void SRT(std::vector<Process> Processes) {
+	
 }
