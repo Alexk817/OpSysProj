@@ -62,6 +62,9 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 	return processes;
 }
 
+/*
+  Output for to simout for the final output of the program
+*/
 void finalOutput(std::ofstream simout, std::vector<double> data, std::string algo) {
   simout << "Algorithm " << algo << std::endl;
   simout << "-- average CPU burst time: " << data[0] << " ms" << std::endl;
