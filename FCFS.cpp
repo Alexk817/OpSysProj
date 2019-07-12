@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <stdlib.h>
-#include "Taufunc.h"
+#include "helper.h"
 
 void FCFS(std::vector<Process> processes, int context_time) {
     // Vector to act as the ready queue
