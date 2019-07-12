@@ -9,12 +9,6 @@
 class Process {
 public:
     Process(char aName, int aArrival, std::vector<std::pair<int, int> > aCPUBursts, int initTau);
-    char getName() const;
-    int getArrival() const;
-    std::vector<std::pair<int, int> > getCPUBursts() const;
-    std::string getStatus() const;
-    void setStatus(std::string newStatus);
-
     char name;
     int arrival;
     std::vector<std::pair<int, int> > CPU_bursts;
