@@ -7,19 +7,6 @@
 #include <stdlib.h>
 #include "helper.h"
 
-void printEvent(int time, std::string detail, std::vector<Process*> que){
-    std::cout << "time " << time << "ms: " << detail << " [Q";
-    if (que.size()){
-        for (int i = 0; i < que.size(); i++){
-            std::cout << " " << (*que[i]).name ;
-        }
-    }
-    else {
-        std::cout << " <empty>";
-    }
-    std::cout << "]" << std::endl;
-}
-
 void FCFS(std::vector<Process> processes, int context_time) {
     // Vector to act as the ready queue
     std::vector<Process*> ready_queue;

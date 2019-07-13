@@ -61,12 +61,15 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 		processes.push_back(temp);
 	}
 
-	for(int i=0; i < num_processes; i++){
-		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts\n";
+	for (int i = 0; i < num_processes; i++) {
+		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << "ms) " << processes[i].CPU_bursts.size() << " CPU bursts\n";
 	}
 	return processes;
 }
 
+/*
+  Output for to simout for the final output of the program
+*/
 void finalOutput(std::ofstream simout, std::vector<double> data, std::string algo) {
   simout << "Algorithm " << algo << std::endl;
   simout << "-- average CPU burst time: " << data[0] << " ms" << std::endl;
@@ -112,9 +115,5 @@ int main(int argc, char const *argv[]) {
   simout.open("simout.txt");
   simout.close();
 	
-	// std::vector<Process> test = generateProcesses(2, 5, .001, 3000);
- //  std::cout << test[0].name << ": " << test[0].arrival << "\n";
- //  std::cout << test[1].name << ": " << test[1].arrival << "\n";
-
 	return EXIT_SUCCESS;
 }
