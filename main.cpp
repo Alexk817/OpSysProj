@@ -68,7 +68,7 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 /*
   Output for to simout for the final output of the program
 */
-void finalOutput(std::ofstream simout, std::vector<double> data, std::string algo) {
+void finalOutput(std::ofstream &simout, std::vector<double> data, std::string algo) {
   simout << "Algorithm " << algo << std::endl;
   simout << "-- average CPU burst time: " << data[0] << " ms" << std::endl;
   simout << "-- average wait time: " << data[1] << " ms" << std::endl;
@@ -114,10 +114,12 @@ int main(int argc, char const *argv[]) {
 			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst\n";
 		}
 	}
-  FCFS(processes,time_context_switch);
+  std::vector<double> res_FCFS = FCFS(processes,time_context_switch);
   // Outputting to the simout.txt file
   std::ofstream simout;
   simout.open("simout.txt");
+  simout << std::fixed << std::setprecision(3);
+  finalOutput(simout, res_FCFS, "FCFS");
   simout.close();
 	
 	return EXIT_SUCCESS;
