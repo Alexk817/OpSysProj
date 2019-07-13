@@ -14,4 +14,7 @@ int tauGuess(int lastTau, float alpha, int lastTime);
 // Printing for the CPU sceduling algorithms
 void printEvent(int time, std::string detail, std::vector<Process*> que);
 
+// Calculate average CPU burst time
+double calcAvgCPUBurst(std::vector<Process> &processes);
+
 #endif

@@ -9,7 +9,7 @@
 #include "helper.h"
 
 /* Will be the First Come First Serve CPU scheduling algorithm */
-void FCFS(std::vector<Process> processes, int context_time);
+std::vector<double> FCFS(std::vector<Process> processes, int context_time);
 
 /* Will be the Shortest Job First CPU scheduling algorithm */
 void SJF();
