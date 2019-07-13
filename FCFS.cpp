@@ -27,7 +27,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
 
     // While there are still processes running
     while (active_processes.size()) {
-        for (int i = 0; i < processes.size(); i++) {
+        for (unsigned int i = 0; i < processes.size(); i++) {
 
             if (processes[i].arrival == curr_time) {
                 ready_queue.push_back(&processes[i]);
@@ -40,7 +40,6 @@ void FCFS(std::vector<Process> processes, int context_time) {
                     printEvent(curr_time,std::string("Process ")+processes[i].name+" completed I/O; added to ready queue",ready_queue);
                 }
             }
-
         }
         // If there is not a current process being run
         if (!curr_process) {
@@ -49,11 +48,10 @@ void FCFS(std::vector<Process> processes, int context_time) {
                 //take what we think is the next process 
                 curr_process = (ready_queue[0]);
                 ready_queue.erase(ready_queue.begin());
-                //
                 //do the context switch time to load it in
                  for (int j = 0; j < context_time/2; j++) {
                     curr_time++;
-                    for (int i = 0; i < processes.size(); i++) {
+                    for (unsigned int i = 0; i < processes.size(); i++) {
                         if (processes[i].arrival == curr_time) {
                             ready_queue.push_back(&processes[i]);
                             //if it just arrived print this message
@@ -84,7 +82,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
                     done_process.push_back(*curr_process);
                     // remove element from processes vector
                     printEvent(curr_time,std::string("Process ")+(*curr_process).name+" terminated",ready_queue);
-                    for (int i = 0; i < active_processes.size(); i++) {
+                    for (unsigned int i = 0; i < active_processes.size(); i++) {
                         if (active_processes[i].name == (*curr_process).name) {
                             active_processes.erase(active_processes.begin()+i);
                             break;
@@ -114,7 +112,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
                  // In a context switch it out
                 for (int j = 0; j < context_time/2; j++) {
                     curr_time++;
-                    for (int i = 0; i < processes.size(); i++) {
+                    for (unsigned int i = 0; i < processes.size(); i++) {
                         if (processes[i].arrival == curr_time) {
                             ready_queue.push_back(&processes[i]);
                             //if it just arrived print this message
@@ -132,11 +130,10 @@ void FCFS(std::vector<Process> processes, int context_time) {
                     //take what we think is the next process 
                     curr_process = ready_queue[0];
                     ready_queue.erase(ready_queue.begin());
-                    //
                     //do the context switch time to load it in
                      for (int j = 0; j < context_time/2; j++) {
                         curr_time++;
-                        for (int i = 0; i < processes.size(); i++) {
+                        for (unsigned int i = 0; i < processes.size(); i++) {
                             if (processes[i].arrival == curr_time) {
                                 ready_queue.push_back(&processes[i]);
                                 //if it just arrived print this message
@@ -149,12 +146,8 @@ void FCFS(std::vector<Process> processes, int context_time) {
                                 }
                             }
                         }
-                    }
-                    //now we ready to go
-                    
-                    
+                     }
                 }
-            
                 else {
                     curr_process = NULL;
                 }
