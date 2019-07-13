@@ -16,6 +16,7 @@ public:
     std::vector<std::pair<int, int> > CPU_bursts;
     std::string status;
     int tau;
+    int wait_time;
 };
 
 #endif

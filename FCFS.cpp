@@ -7,6 +7,11 @@
 #include <stdlib.h>
 #include "helper.h"
 
+void incWaitTime(std::vector<Process*> &ready_queue) {
+    for (unsigned int  i = 0; i < ready_queue.size(); i++) {
+        (*ready_queue[i]).wait_time++;
+    }
+}
 
 void addArived(std::vector<Process> &processes,std::vector<Process*> &ready_queue,int &curr_time){
     for (unsigned int i = 0; i < processes.size(); i++) {
@@ -31,6 +36,7 @@ void addArived(std::vector<Process> &processes,std::vector<Process*> &ready_queu
         ready_queue.erase(ready_queue.begin());
         //do the context switch time to load it in
          for (int j = 0; j < context_time/2; j++) {
+            incWaitTime(ready_queue);
             curr_time++;
             addArived(processes,ready_queue,curr_time);
         }
@@ -42,7 +48,15 @@ void addArived(std::vector<Process> &processes,std::vector<Process*> &ready_queu
     }
  }
 
-void FCFS(std::vector<Process> processes, int context_time) {
+double calcAvgVal(std::vector<int> times) {
+    double sum = 0;
+    for (unsigned int i = 0; i < times.size(); i++) {
+        sum += times[i];
+    }
+    return sum / times.size();
+}
+
+std::vector<double> FCFS(std::vector<Process> processes, int context_time) {
     // Vector to act as the ready queue
     std::vector<Process*> ready_queue;
     //Vector of processes still active
@@ -58,6 +72,11 @@ void FCFS(std::vector<Process> processes, int context_time) {
     int curr_time = 0;
     //buffer for converting ints to strings
     char* buff = (char*)calloc(100,sizeof(char));
+    // Return vector for output to simout.txt
+    // [average CPU burst time, average wait time, average turnaround time, num context switches, num of preemtions]
+    std::vector<double> ret_vals; 
+    ret_vals.push_back(calcAvgCPUBurst(processes));
+    int num_context_switch = 0;
     printEvent(curr_time,"Simulator started for FCFS",ready_queue);
 
 
@@ -73,7 +92,11 @@ void FCFS(std::vector<Process> processes, int context_time) {
         else {
             // If the current process ends in this timeslot
             if (!--(*curr_process).CPU_bursts[(*curr_process).burst_num].first) {
-                // TODO: Output for turnaround times, wait times
+                // add for turnaround times, wait times to vectors
+                turn_times.push_back(curr_time - (*curr_process).arrival + (context_time/2));
+                wait_times.push_back((*curr_process).wait_time);
+                (*curr_process).wait_time = 0;
+
 
                 // Process is complete since we are on last CPU burst
                 if ((*curr_process).CPU_bursts[(*curr_process).burst_num].second < 0) {
@@ -111,7 +134,9 @@ void FCFS(std::vector<Process> processes, int context_time) {
                 }
                  // In a context switch it out
                 addArived(processes,ready_queue,curr_time);
+                num_context_switch++;
                 for (int j = 0; j < context_time/2; j++) {
+                    incWaitTime(ready_queue);
                     curr_time++;
                     addArived(processes,ready_queue,curr_time);
                 }
@@ -122,6 +147,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
 
                     //do the context switch time to load it in
                      for (int j = 0; j < context_time/2; j++) {
+                        incWaitTime(ready_queue);
                         curr_time++;
                        if (j == context_time/2 -1){
                              sprintf(buff,"%d",(*curr_process).CPU_bursts[(*curr_process).burst_num].first );
@@ -140,10 +166,17 @@ void FCFS(std::vector<Process> processes, int context_time) {
             }
             
         }
-        
+        incWaitTime(ready_queue);
         curr_time++;
     }
     //decrease current time by one because it add one before but its not actually another tick
     printEvent(curr_time-1,"Simulator ended for FCFS",ready_queue);
     free(buff);
+
+    // Add values to the ret_vals
+    ret_vals.push_back(calcAvgVal(wait_times));
+    ret_vals.push_back(calcAvgVal(turn_times));
+    ret_vals.push_back(double(num_context_switch));
+    ret_vals.push_back(0.0);
+    return ret_vals;
 }

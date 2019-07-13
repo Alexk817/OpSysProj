@@ -23,3 +23,15 @@ void printEvent(int time, std::string detail, std::vector<Process*> que){
     }
     std::cout << "]" << std::endl;
 }
+
+double calcAvgCPUBurst(std::vector<Process> &processes) {
+	double total_time = 0;
+	int num_of_burst = 0;
+	for (unsigned int i = 0; i < processes.size(); i++) {
+		num_of_burst += processes[i].CPU_bursts.size();
+		for (unsigned int j = 0; j < processes[i].CPU_bursts.size(); j++) {
+			total_time += processes[i].CPU_bursts[j].first;
+		}
+	}
+	return total_time / num_of_burst;
+}
