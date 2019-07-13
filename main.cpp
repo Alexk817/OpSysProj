@@ -18,38 +18,39 @@
 */
 std::vector<Process> generateProcesses(int num_processes, int seed, double lambda, int upper_bound) {
 	srand48(seed);
-	double r,x;
+	double r;
+	int x;
 	std::vector<Process> processes;
 	char name;
 	for (int i = 0; i < num_processes; i++) {
 		name = 'A' + i;
 		r = drand48();
-		x = -log( r ) / lambda;
+		x = floor(-log( r ) / lambda);
 		while(x > upper_bound) {
 			r = drand48();
-			x = -log( r ) / lambda;  
+			x = floor(-log( r ) / lambda);  
 		}
-		int arrival = floor(x);
+		int arrival = x;
 		r = drand48();
-		int num_bursts = floor(r * 100);
+		int num_bursts = floor(r * 100) + 1;
 		std::vector<std::pair<int, int> > burst_times;
 		for (int j = 0; j < num_bursts; j++) {
 			std::pair<int, int> temp_pair;
 			r = drand48();
-			x = -log( r ) / lambda;
+			x = ceil(-log( r ) / lambda);
 			while (x > upper_bound) {
 				r = drand48();
-				x = -log( r ) / lambda;  
+				x = ceil(-log( r ) / lambda);  
 			}
 			temp_pair.first = ceil(x);
 			r = drand48();
-			x = -log( r ) / lambda;
+			x = ceil(-log( r ) / lambda);
 			while (x > upper_bound) {
 				r = drand48();
-				x = -log( r ) / lambda;  
+				x = ceil(-log( r ) / lambda);  
 			}
 			if (j != num_bursts-1) {
-				temp_pair.second = ceil(x);
+				temp_pair.second = x;
 			}
       else {
 				temp_pair.second = -1;
