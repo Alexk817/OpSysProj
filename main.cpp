@@ -42,14 +42,15 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 				r = drand48();
 				x = ceil(-log( r ) / lambda);  
 			}
-			temp_pair.first = ceil(x);
-			r = drand48();
-			x = ceil(-log( r ) / lambda);
-			while (x > upper_bound) {
-				r = drand48();
-				x = ceil(-log( r ) / lambda);  
-			}
+			temp_pair.first = x;
+		
 			if (j != num_bursts-1) {
+        r = drand48();
+        x = ceil(-log( r ) / lambda);
+        while (x > upper_bound) {
+          r = drand48();
+          x = ceil(-log( r ) / lambda);  
+        }
 				temp_pair.second = x;
 			}
       else {
@@ -62,7 +63,7 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 	}
 
 	for (int i = 0; i < num_processes; i++) {
-		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << "ms) " << processes[i].CPU_bursts.size() << " CPU bursts\n";
+		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts\n";
 	}
 	return processes;
 }

@@ -61,7 +61,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
                                 printEvent(curr_time,std::string("Process ")+processes[i].name+" arrived; added to ready queue",ready_queue);
                             }
                             //otherwise its retruning from i/o so print this
-                             if (processes[i].burst_num == 0){
+                             else {
                                 printEvent(curr_time,std::string("Process ")+processes[i].name+" completed I/O; added to ready queue",ready_queue);
                             }
                         }
@@ -122,7 +122,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
                                 printEvent(curr_time,std::string("Process ")+processes[i].name+" arrived; added to ready queue",ready_queue);
                             }
                             //otherwise its retruning from i/o so print this
-                             if (processes[i].burst_num == 0){
+                             else {
                                 printEvent(curr_time,std::string("Process ")+processes[i].name+" completed I/O; added to ready queue",ready_queue);
                             }
                         }
@@ -132,10 +132,16 @@ void FCFS(std::vector<Process> processes, int context_time) {
                     //take what we think is the next process 
                     curr_process = ready_queue[0];
                     ready_queue.erase(ready_queue.begin());
+
                     //
                     //do the context switch time to load it in
                      for (int j = 0; j < context_time/2; j++) {
                         curr_time++;
+                        if (j == context_time/2 -1){
+                             sprintf(buff,"%d",(*curr_process).CPU_bursts[(*curr_process).burst_num].first );
+
+                             printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff  +"ms burst",ready_queue);
+                        }
                         for (int i = 0; i < processes.size(); i++) {
                             if (processes[i].arrival == curr_time) {
                                 ready_queue.push_back(&processes[i]);
@@ -144,12 +150,13 @@ void FCFS(std::vector<Process> processes, int context_time) {
                                     printEvent(curr_time,std::string("Process ")+processes[i].name+" arrived; added to ready queue",ready_queue);
                                 }
                                 //otherwise its retruning from i/o so print this
-                                 if (processes[i].burst_num == 0){
+                                 else {
                                     printEvent(curr_time,std::string("Process ")+processes[i].name+" completed I/O; added to ready queue",ready_queue);
                                 }
                             }
                         }
                     }
+                    
                     //now we ready to go
                     
                     
