@@ -107,9 +107,15 @@ void FCFS(std::vector<Process> processes, int context_time) {
                 // Process finished burst but has to go to IO
                 else {
                     // Process will rearrive at this new time
-                    sprintf(buff,"%ld",((*curr_process).CPU_bursts.size()-(*curr_process).burst_num));
-                    printEvent(curr_time,std::string("Process ")+(*curr_process).name+" completed a CPU burst; "+buff+" bursts to go",ready_queue);
-
+                    sprintf(buff,"%ld",((*curr_process).CPU_bursts.size()-(*curr_process).burst_num)-1);
+                    //if there is only one left make it singular
+                    if (buff[0] == '1' && buff[1] == '\0'){
+                         printEvent(curr_time,std::string("Process ")+(*curr_process).name+" completed a CPU burst; "+buff+" burst to go",ready_queue);
+                    }
+                    //else make it plural
+                    else{
+                        printEvent(curr_time,std::string("Process ")+(*curr_process).name+" completed a CPU burst; "+buff+" bursts to go",ready_queue);
+                    }
                     (*curr_process).arrival = curr_time + (*curr_process).CPU_bursts[(*curr_process).burst_num].second + context_time/2;
 
                     sprintf(buff,"%d",(*curr_process).arrival );
@@ -169,6 +175,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
         }
         curr_time++;
     }
-    printEvent(curr_time,"Simulator ended for FCFS",ready_queue);
+    //decrease current time by one because it add one before but its not actually another tick
+    printEvent(curr_time-1,"Simulator ended for FCFS",ready_queue);
     free(buff);
 }
