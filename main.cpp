@@ -63,7 +63,11 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 	}
 
 	for (int i = 0; i < num_processes; i++) {
-		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts\n";
+		if(processes[i].CPU_bursts.size() > 1){
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts\n";
+		}else{
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst\n";
+		}
 	}
 	return processes;
 }
