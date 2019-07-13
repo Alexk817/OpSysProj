@@ -64,9 +64,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
 
     // While there are still processes running
     while (active_processes.size()) {
-        // if (curr_time > 45000)
-        //     std::cerr << active_processes.size() << std::endl;
-        //addArived(processes,ready_queue,curr_time);
+        
         // If there is not a current process being run
         if (!curr_process) {
            addArived(processes,ready_queue,curr_time);
@@ -87,11 +85,9 @@ void FCFS(std::vector<Process> processes, int context_time) {
                             active_processes.erase(active_processes.begin()+i);
                             break;
                         }
-                        if (i == active_processes.size()-1 ){
-                            std::cerr << "Couldnt find it" << std::endl;
-                        }
+                        
                     }
-                    std::cerr << (*curr_process).name << " terminated" << std::endl;
+                    
                 }
                 // Process finished burst but has to go to IO
                 else {
