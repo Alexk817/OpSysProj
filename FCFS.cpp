@@ -23,6 +23,8 @@ void printEvent(int time, std::string detail, std::vector<Process*> que){
 void FCFS(std::vector<Process> processes, int context_time) {
     // Vector to act as the ready queue
     std::vector<Process*> ready_queue;
+    //Vector of processes still active
+    std::vector<Process> active_processes = processes;
     // Vector to hold processes that are completed
     std::vector<Process> done_process;
     // Vector to hold turnaround times
@@ -37,7 +39,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
     printEvent(curr_time,"Simulator started for FCFS",ready_queue);
 
     // While there are still processes running
-    while (processes.size()) {
+    while (active_processes.size()) {
         for (int i = 0; i < processes.size(); i++) {
 
             if (processes[i].arrival == curr_time) {
@@ -95,9 +97,9 @@ void FCFS(std::vector<Process> processes, int context_time) {
                     done_process.push_back(*curr_process);
                     // remove element from processes vector
                     printEvent(curr_time,std::string("Process ")+(*curr_process).name+" terminated",ready_queue);
-                    for (int i = 0; i < processes.size(); i++) {
-                        if (processes[i].name == (*curr_process).name) {
-                            processes.erase(processes.begin()+i);
+                    for (int i = 0; i < active_processes.size(); i++) {
+                        if (active_processes[i].name == (*curr_process).name) {
+                            active_processes.erase(active_processes.begin()+i);
                             break;
                         }
                     }
