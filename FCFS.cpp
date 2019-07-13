@@ -7,6 +7,41 @@
 #include <stdlib.h>
 #include "helper.h"
 
+
+void addArived(std::vector<Process> &processes,std::vector<Process*> &ready_queue,int &curr_time){
+    for (unsigned int i = 0; i < processes.size(); i++) {
+
+            if (processes[i].arrival == curr_time) {
+                ready_queue.push_back(&processes[i]);
+                //if it just arrived print this message
+                if (processes[i].burst_num == 0){
+                    printEvent(curr_time,std::string("Process ")+processes[i].name+" arrived; added to ready queue",ready_queue);
+                }
+                //otherwise its retruning from i/o so print this
+                else{
+                    printEvent(curr_time,std::string("Process ")+processes[i].name+" completed I/O; added to ready queue",ready_queue);
+                }
+            }
+        }
+}
+ void popQueifPossible(std::vector<Process*> &ready_queue, Process* &curr_process, int &curr_time ,std::vector<Process> &processes, int &context_time,char* buff ){
+     if (ready_queue.size()) {
+        //take what we think is the next process 
+        curr_process = (ready_queue[0]);
+        ready_queue.erase(ready_queue.begin());
+        //do the context switch time to load it in
+         for (int j = 0; j < context_time/2; j++) {
+            curr_time++;
+            addArived(processes,ready_queue,curr_time);
+        }
+        //now we ready to go
+        sprintf(buff,"%d",(*curr_process).CPU_bursts[(*curr_process).burst_num].first );
+
+        printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff  +"ms burst",ready_queue);
+        
+    }
+ }
+
 void FCFS(std::vector<Process> processes, int context_time) {
     // Vector to act as the ready queue
     std::vector<Process*> ready_queue;
@@ -25,52 +60,15 @@ void FCFS(std::vector<Process> processes, int context_time) {
     char* buff = (char*)calloc(100,sizeof(char));
     printEvent(curr_time,"Simulator started for FCFS",ready_queue);
 
+
+
     // While there are still processes running
     while (active_processes.size()) {
-        for (unsigned int i = 0; i < processes.size(); i++) {
-
-            if (processes[i].arrival == curr_time) {
-                ready_queue.push_back(&processes[i]);
-                //if it just arrived print this message
-                if (processes[i].burst_num == 0){
-                    printEvent(curr_time,std::string("Process ")+processes[i].name+" arrived; added to ready queue",ready_queue);
-                }
-                //otherwise its retruning from i/o so print this
-                else{
-                    printEvent(curr_time,std::string("Process ")+processes[i].name+" completed I/O; added to ready queue",ready_queue);
-                }
-            }
-        }
+        
         // If there is not a current process being run
         if (!curr_process) {
-
-            if (ready_queue.size()) {
-                //take what we think is the next process 
-                curr_process = (ready_queue[0]);
-                ready_queue.erase(ready_queue.begin());
-                //do the context switch time to load it in
-                 for (int j = 0; j < context_time/2; j++) {
-                    curr_time++;
-                    for (unsigned int i = 0; i < processes.size(); i++) {
-                        if (processes[i].arrival == curr_time) {
-                            ready_queue.push_back(&processes[i]);
-                            //if it just arrived print this message
-                            if (processes[i].burst_num == 0){
-                                printEvent(curr_time,std::string("Process ")+processes[i].name+" arrived; added to ready queue",ready_queue);
-                            }
-                            //otherwise its retruning from i/o so print this
-                             else {
-                                printEvent(curr_time,std::string("Process ")+processes[i].name+" completed I/O; added to ready queue",ready_queue);
-                            }
-                        }
-                    }
-                }
-                //now we ready to go
-                sprintf(buff,"%d",(*curr_process).CPU_bursts[(*curr_process).burst_num].first );
-
-                printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff  +"ms burst",ready_queue);
-                
-            }
+            
+           popQueifPossible(ready_queue, curr_process, curr_time ,processes,context_time,buff);
         }
         else {
             // If the current process ends in this timeslot
@@ -112,19 +110,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
                  // In a context switch it out
                 for (int j = 0; j < context_time/2; j++) {
                     curr_time++;
-                    for (unsigned int i = 0; i < processes.size(); i++) {
-                        if (processes[i].arrival == curr_time) {
-                            ready_queue.push_back(&processes[i]);
-                            //if it just arrived print this message
-                            if (processes[i].burst_num == 0){
-                                printEvent(curr_time,std::string("Process ")+processes[i].name+" arrived; added to ready queue",ready_queue);
-                            }
-                            //otherwise its retruning from i/o so print this
-                             else {
-                                printEvent(curr_time,std::string("Process ")+processes[i].name+" completed I/O; added to ready queue",ready_queue);
-                            }
-                        }
-                    }
+                    addArived(processes,ready_queue,curr_time);
                 }
                 if (ready_queue.size()) {
                     //take what we think is the next process 
@@ -139,27 +125,16 @@ void FCFS(std::vector<Process> processes, int context_time) {
 
                              printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff  +"ms burst",ready_queue);
                         }
-                        for (unsigned int i = 0; i < processes.size(); i++) {
-
-                            if (processes[i].arrival == curr_time) {
-                                ready_queue.push_back(&processes[i]);
-                                //if it just arrived print this message
-                                if (processes[i].burst_num == 0){
-                                    printEvent(curr_time,std::string("Process ")+processes[i].name+" arrived; added to ready queue",ready_queue);
-                                }
-                                //otherwise its retruning from i/o so print this
-                                 else {
-                                    printEvent(curr_time,std::string("Process ")+processes[i].name+" completed I/O; added to ready queue",ready_queue);
-                                }
-                            }
-                        }
+                        addArived(processes,ready_queue,curr_time);
                      }
                 }
                 else {
                     curr_process = NULL;
                 }
             }
+            //addArived(processes,ready_queue,curr_time);
         }
+        addArived(processes,ready_queue,curr_time);
         curr_time++;
     }
     //decrease current time by one because it add one before but its not actually another tick
