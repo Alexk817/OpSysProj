@@ -100,7 +100,8 @@ int main(int argc, char const *argv[]) {
 		rr_add = std::string(argv[8]);
 	}
 
-
+  std::vector<Process> procceses = generateProcesses(num_processes,seed,lambda,upper_bound);
+  FCFS(procceses,time_context_switch);
   // Outputting to the simout.txt file
   std::ofstream simout;
   simout.open("simout.txt");
