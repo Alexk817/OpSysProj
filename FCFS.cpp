@@ -64,10 +64,12 @@ void FCFS(std::vector<Process> processes, int context_time) {
 
     // While there are still processes running
     while (active_processes.size()) {
-        
+        // if (curr_time > 45000)
+        //     std::cerr << active_processes.size() << std::endl;
+        //addArived(processes,ready_queue,curr_time);
         // If there is not a current process being run
         if (!curr_process) {
-            addArived(processes,ready_queue,curr_time);
+           addArived(processes,ready_queue,curr_time);
            popQueifPossible(ready_queue, curr_process, curr_time ,processes,context_time,buff);
         }
         else {
@@ -85,7 +87,11 @@ void FCFS(std::vector<Process> processes, int context_time) {
                             active_processes.erase(active_processes.begin()+i);
                             break;
                         }
+                        if (i == active_processes.size()-1 ){
+                            std::cerr << "Couldnt find it" << std::endl;
+                        }
                     }
+                    std::cerr << (*curr_process).name << " terminated" << std::endl;
                 }
                 // Process finished burst but has to go to IO
                 else {
@@ -108,6 +114,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
 
                 }
                  // In a context switch it out
+                addArived(processes,ready_queue,curr_time);
                 for (int j = 0; j < context_time/2; j++) {
                     curr_time++;
                     addArived(processes,ready_queue,curr_time);
@@ -132,7 +139,10 @@ void FCFS(std::vector<Process> processes, int context_time) {
                     curr_process = NULL;
                 }
             }
-            addArived(processes,ready_queue,curr_time);
+            else {
+                addArived(processes,ready_queue,curr_time);
+            }
+            
         }
         
         curr_time++;
