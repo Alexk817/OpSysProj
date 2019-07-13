@@ -62,13 +62,6 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 		processes.push_back(temp);
 	}
 
-	for (int i = 0; i < num_processes; i++) {
-		if(processes[i].CPU_bursts.size() > 1){
-			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts\n";
-		}else{
-			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst\n";
-		}
-	}
 	return processes;
 }
 
@@ -113,8 +106,15 @@ int main(int argc, char const *argv[]) {
 		rr_add = std::string(argv[8]);
 	}
 
-  std::vector<Process> procceses = generateProcesses(num_processes,seed,lambda,upper_bound);
-  FCFS(procceses,time_context_switch);
+  std::vector<Process> processes = generateProcesses(num_processes,seed,lambda,upper_bound);
+  for (int i = 0; i < num_processes; i++) {
+		if(processes[i].CPU_bursts.size() > 1){
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts\n";
+		}else{
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst\n";
+		}
+	}
+  FCFS(processes,time_context_switch);
   // Outputting to the simout.txt file
   std::ofstream simout;
   simout.open("simout.txt");
