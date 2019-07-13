@@ -67,7 +67,7 @@ void FCFS(std::vector<Process> processes, int context_time) {
         
         // If there is not a current process being run
         if (!curr_process) {
-            
+            addArived(processes,ready_queue,curr_time);
            popQueifPossible(ready_queue, curr_process, curr_time ,processes,context_time,buff);
         }
         else {
@@ -132,9 +132,9 @@ void FCFS(std::vector<Process> processes, int context_time) {
                     curr_process = NULL;
                 }
             }
-            //addArived(processes,ready_queue,curr_time);
+            addArived(processes,ready_queue,curr_time);
         }
-        addArived(processes,ready_queue,curr_time);
+        
         curr_time++;
     }
     //decrease current time by one because it add one before but its not actually another tick
