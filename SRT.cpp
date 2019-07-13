@@ -8,5 +8,7 @@
 #include "helper.h"
 
 void SRT(std::vector<Process> Processes) {
-	
+	//current time
+	int t = 0;
+	//
 }
