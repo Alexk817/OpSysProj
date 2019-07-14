@@ -195,9 +195,12 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
                     {
                         incWaitTime(ready_queue);
                         curr_time++;
+                        if (j == context_time / 2 - 1)
+                        {
+                            preemptProcess(curr_process, ready_queue, rr_add);
+                        }
                         addArived(processes, ready_queue, curr_time);
                     }
-                    preemptProcess(curr_process, ready_queue, rr_add);
                     if (ready_queue.size())
                     {
                         //take what we think is the next process
