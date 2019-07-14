@@ -22,6 +22,7 @@ public:
     int wait_time;
     int next_tau;
     double alpha;
+    bool preempted;
 };
 
 #endif

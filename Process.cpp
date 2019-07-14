@@ -18,6 +18,7 @@ Process::Process(char aName, int aArrival, std::vector<std::pair<int, int>> aCPU
     tau = initTau;
     next_tau = tauGuess(tau, alpha, CPU_bursts[burst_num].first);
     wait_time = 0;
+    preempted = false;
 }
 void Process::updateTau()
 {
