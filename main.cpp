@@ -120,53 +120,53 @@ int main(int argc, char const *argv[])
 		}
 		rr_add = std::string(argv[8]);
 	}
-	// //FCFS
-	// std::vector<Process> processes = generateProcesses(num_processes, seed, lambda, upper_bound, alpha);
-	// for (int i = 0; i < num_processes; i++)
-	// {
-	// 	if (processes[i].CPU_bursts.size() > 1)
-	// 	{
-	// 		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts\n";
-	// 	}
-	// 	else
-	// 	{
-	// 		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst\n";
-	// 	}
-	// }
-	// std::vector<double> res_FCFS = FCFS(processes, time_context_switch);
-	// std::cout << "\n";
-	// //SJF
-	// processes = generateProcesses(num_processes, seed, lambda, upper_bound, alpha);
-	// for (int i = 0; i < num_processes; i++)
-	// {
-	// 	if (processes[i].CPU_bursts.size() > 1)
-	// 	{
-	// 		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts (tau " << processes[i].tau << "ms)\n";
-	// 	}
-	// 	else
-	// 	{
-	// 		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst  (tau " << processes[i].tau << "ms)\n";
-	// 	}
-	// }
-	// std::vector<double> res_SJF = SJF(processes, time_context_switch);
-	// std::cout << "\n";
-	// //SRT
-	// processes = generateProcesses(num_processes, seed, lambda, upper_bound, alpha);
-	// for (int i = 0; i < num_processes; i++)
-	// {
-	// 	if (processes[i].CPU_bursts.size() > 1)
-	// 	{
-	// 		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts (tau " << processes[i].tau << "ms)\n";
-	// 	}
-	// 	else
-	// 	{
-	// 		std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst  (tau " << processes[i].tau << "ms)\n";
-	// 	}
-	// }
-	// std::vector<double> res_SRT = SRT(processes, time_context_switch);
-	// std::cout << "\n";
-	//RR
+	//FCFS
 	std::vector<Process> processes = generateProcesses(num_processes, seed, lambda, upper_bound, alpha);
+	for (int i = 0; i < num_processes; i++)
+	{
+		if (processes[i].CPU_bursts.size() > 1)
+		{
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts\n";
+		}
+		else
+		{
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst\n";
+		}
+	}
+	std::vector<double> res_FCFS = FCFS(processes, time_context_switch);
+	std::cout << "\n";
+	//SJF
+	processes = generateProcesses(num_processes, seed, lambda, upper_bound, alpha);
+	for (int i = 0; i < num_processes; i++)
+	{
+		if (processes[i].CPU_bursts.size() > 1)
+		{
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts (tau " << processes[i].tau << "ms)\n";
+		}
+		else
+		{
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst  (tau " << processes[i].tau << "ms)\n";
+		}
+	}
+	std::vector<double> res_SJF = SJF(processes, time_context_switch);
+	std::cout << "\n";
+	//SRT
+	processes = generateProcesses(num_processes, seed, lambda, upper_bound, alpha);
+	for (int i = 0; i < num_processes; i++)
+	{
+		if (processes[i].CPU_bursts.size() > 1)
+		{
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts (tau " << processes[i].tau << "ms)\n";
+		}
+		else
+		{
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst  (tau " << processes[i].tau << "ms)\n";
+		}
+	}
+	std::vector<double> res_SRT = SRT(processes, time_context_switch);
+	std::cout << "\n";
+	//RR
+	processes = generateProcesses(num_processes, seed, lambda, upper_bound, alpha);
 	for (int i = 0; i < num_processes; i++)
 	{
 		if (processes[i].CPU_bursts.size() > 1)
@@ -183,9 +183,9 @@ int main(int argc, char const *argv[])
 	std::ofstream simout;
 	simout.open("simout.txt");
 	simout << std::fixed << std::setprecision(3);
-	// finalOutput(simout, res_FCFS, "FCFS");
-	// finalOutput(simout, res_SJF, "SJF");
-	// finalOutput(simout, res_SRT, "SRT");
+	finalOutput(simout, res_FCFS, "FCFS");
+	finalOutput(simout, res_SJF, "SJF");
+	finalOutput(simout, res_SRT, "SRT");
 	finalOutput(simout, res_RR, "RR");
 	simout.close();
 

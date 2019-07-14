@@ -181,7 +181,6 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
                     sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
                     printEvent(curr_time, std::string("Time slice expired; process ") + (*curr_process).name + " preempted with " + buff + "ms to go", ready_queue);
                     (*curr_process).preempted = true;
-                    preemptProcess(curr_process, ready_queue, rr_add);
                     num_preempt++;
                     // Preempt the process and add the next process in the queue with a context switch
                     addArived(processes, ready_queue, curr_time);
@@ -192,6 +191,7 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
                         curr_time++;
                         addArived(processes, ready_queue, curr_time);
                     }
+                    preemptProcess(curr_process, ready_queue, rr_add);
                     if (ready_queue.size())
                     {
                         //take what we think is the next process
