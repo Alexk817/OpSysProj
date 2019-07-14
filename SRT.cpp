@@ -57,7 +57,7 @@ void SRT_addArived(std::vector<Process> &processes, std::vector<Process *> &read
             {
                 sprintf(buff2, "%d", processes[i].tau);
 
-                if (curr_process && processes[i].working_tau < (*curr_process).working_tau && !context_switch){
+                if (curr_process && processes[i].name == ready_queue[0]->name && processes[i].working_tau < (*curr_process).working_tau && !context_switch){
                 	printEvent(curr_time, std::string("Process ") + processes[i].name + " (tau " + buff2 + "ms)" + " arrived; preempting "+ (*curr_process).name, ready_queue);
                 	curr_process->preempted = true;
                 	//std::cerr << curr_process->preempted << std::endl;
@@ -74,7 +74,7 @@ void SRT_addArived(std::vector<Process> &processes, std::vector<Process *> &read
             {
                 sprintf(buff2, "%d", processes[i].tau);
 
-               if (curr_process && processes[i].working_tau < (*curr_process).working_tau && !context_switch) {
+               if (curr_process && processes[i].name == ready_queue[0]->name && processes[i].working_tau < (*curr_process).working_tau && !context_switch) {
                		//std::cerr << context_switch << std::endl;
                     printEvent(curr_time, std::string("Process ") + processes[i].name + " (tau " + buff2 + "ms)" + " completed I/O; preempting " + (*curr_process).name, ready_queue);
                     curr_process->preempted = true;
@@ -272,8 +272,9 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
                     //Recalculated tau = 1016ms for process A
                 }
                 // In a context switch it out
-                SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process,false);
+                SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process,true);
                 num_context_switch++;
+
                 for (int j = 0; j < context_time / 2; j++)
                 {
                     incWaitTime(ready_queue);
