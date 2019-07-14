@@ -8,7 +8,8 @@
 #include "helper.h"
 
 // Function to preempt a process and add it to the end or beginning of the ready queue
-void preemptProcess(Process *) {
+// Will set curr_process to the next element 
+void preemptProcess(Process* curr_process, std::vector<Process*> ready_queue, std::string rr_add) {
     
 }
 
@@ -52,6 +53,8 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
         // adding to beginning or end depends on rr_add
         else if (curr_time_slice == time_slice) {
             curr_time_slice = 0;
+            // Only preempt if there are other processes on the ready queue
+
             // Preempt the process and add the next process in the queue with a context switch
 
         }
