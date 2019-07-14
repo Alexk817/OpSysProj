@@ -156,6 +156,59 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
             SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process,false);
 
             SRT_popQueifPossible(ready_queue, curr_process, curr_time, processes, context_time, buff, buff2);
+            while (curr_process && ready_queue.size() && SRT_compareTimeleft()(ready_queue[0], curr_process))
+            {
+                //std::cerr << "old : " << curr_process->working_tau << " New : " << ready_queue[0]->tau << " resulted in " << SRT_compareTimeleft()(ready_queue[0], curr_process) << std::endl;
+                // Only preempt if there are other processes on the ready queue
+
+                sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
+                std::cerr << (curr_process->preempted) << std::endl;
+                if ((curr_process->preempted))
+                {
+                    //printEvent(curr_time, std::string("Process ") + (*curr_process).name + " preempted with " + buff + "ms to go", ready_queue);
+                    curr_process->preempted = false;
+                    
+                }
+                else {
+                	sprintf(buff2, "%d", ready_queue[0]->tau);
+                	printEvent(curr_time, std::string("Process ") + ready_queue[0]->name + " (tau " + buff2 + "ms)" + " will preempt " + curr_process->name, ready_queue);
+                	
+                }
+                //(*curr_process).preempted = true;
+                num_preempt++;
+                // Preempt the process and add the next process in the queue with a context switch
+                //SRT_addArived(processes, ready_queue, curr_time, buff2);
+                num_context_switch++;
+                for (int j = 0; j < context_time / 2; j++)
+                {
+                    incWaitTime(ready_queue);
+                    curr_time++;
+                    if (j == context_time / 2 - 1)
+                    {
+                        SRT_preemptProcess(curr_process, ready_queue);
+                    }
+                    SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process,true);
+                }
+
+                //take what we think is the next process
+                curr_process = ready_queue[0];
+                ready_queue.erase(ready_queue.begin());
+
+                //do the context switch time to load it in
+                for (int j = 0; j < context_time / 2; j++)
+                {
+                    incWaitTime(ready_queue);
+                    curr_time++;
+                    if (j == context_time / 2 - 1)
+                    {
+                        sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
+                        sprintf(buff2, "%d", (*curr_process).tau);
+                        printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
+                        (*curr_process).preempted = false;
+                    }
+                    SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process,true);
+                }
+            }
         }
         //otherwise there is a current process
         else
@@ -252,7 +305,7 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
             SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process,false);
             //or it should be preempted this timeslot************************************************************************************************************8
             //otherwise it might need to be prempted
-            if (curr_process && ready_queue.size() && SRT_compareTimeleft()(ready_queue[0], curr_process))
+            while (curr_process && ready_queue.size() && SRT_compareTimeleft()(ready_queue[0], curr_process))
             {
                 //std::cerr << "old : " << curr_process->working_tau << " New : " << ready_queue[0]->tau << " resulted in " << SRT_compareTimeleft()(ready_queue[0], curr_process) << std::endl;
                 // Only preempt if there are other processes on the ready queue
