@@ -22,6 +22,29 @@ void preemptProcess(Process *&curr_process, std::vector<Process *> &ready_queue,
     curr_process = NULL;
 }
 
+void RR_popQueifPossible(std::vector<Process *> &ready_queue, Process *&curr_process, int &curr_time, std::vector<Process> &processes, int &context_time, char *buff, int &curr_time_slice)
+{
+    if (ready_queue.size())
+    {
+        //take what we think is the next process
+        curr_process = (ready_queue[0]);
+        ready_queue.erase(ready_queue.begin());
+        //do the context switch time to load it in
+        for (int j = 0; j < context_time / 2; j++)
+        {
+            incWaitTime(ready_queue);
+            curr_time++;
+            if (j == context_time / 2 - 1)
+            {
+                sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
+
+                printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff + "ms burst", ready_queue);
+            }
+            addArived(processes, ready_queue, curr_time);
+        }
+    }
+}
+
 std::vector<double> RR(std::vector<Process> processes, int context_time, int time_slice, std::string rr_add)
 {
     // Vector to act as the ready queue
@@ -45,7 +68,7 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
     ret_vals.push_back(calcAvgCPUBurst(processes));
     int num_context_switch = 0;
     int num_preempt = 0;
-    int curr_time_slice = 0;
+    int curr_time_slice = 1;
     printEvent(curr_time, "Simulator started for RR", ready_queue);
 
     // While there are still processes running
@@ -55,59 +78,14 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
         if (!curr_process)
         {
             addArived(processes, ready_queue, curr_time);
-            popQueifPossible(ready_queue, curr_process, curr_time, processes, context_time, buff);
-        }
-        // The time slice has been hit
-        // preempt any process that is being performed and add it to the beginning or end of the ready queue
-        // adding to beginning or end depends on rr_add
-        else if (curr_time_slice == time_slice)
-        {
-            curr_time_slice = 0;
-            // Only preempt if there are other processes on the ready queue
-            if (ready_queue.size())
-            {
-                preemptProcess(curr_process, ready_queue, rr_add);
-                num_preempt++;
-                // Preempt the process and add the next process in the queue with a context switch
-                addArived(processes, ready_queue, curr_time);
-                num_context_switch++;
-                for (int j = 0; j < context_time / 2; j++)
-                {
-                    incWaitTime(ready_queue);
-                    curr_time++;
-                    addArived(processes, ready_queue, curr_time);
-                }
-                if (ready_queue.size())
-                {
-                    //take what we think is the next process
-                    curr_process = ready_queue[0];
-                    ready_queue.erase(ready_queue.begin());
-
-                    //do the context switch time to load it in
-                    for (int j = 0; j < context_time / 2; j++)
-                    {
-                        incWaitTime(ready_queue);
-                        curr_time++;
-                        if (j == context_time / 2 - 1)
-                        {
-                            sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
-
-                            printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff + "ms burst", ready_queue);
-                        }
-                        addArived(processes, ready_queue, curr_time);
-                    }
-                }
-                else
-                {
-                    curr_process = NULL;
-                }
-            }
+            RR_popQueifPossible(ready_queue, curr_process, curr_time, processes, context_time, buff, curr_time_slice);
         }
         else
         {
             // If the current process ends in this timeslot
             if (!--(*curr_process).CPU_bursts[(*curr_process).burst_num].first)
             {
+                curr_time_slice = 1;
                 // add for turnaround times, wait times to vectors
                 turn_times.push_back(curr_time - (*curr_process).arrival + (context_time / 2));
                 wait_times.push_back((*curr_process).wait_time);
@@ -173,8 +151,15 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
                         if (j == context_time / 2 - 1)
                         {
                             sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
-
-                            printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff + "ms burst", ready_queue);
+                            if ((*curr_process).preempted)
+                            {
+                                printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
+                                (*curr_process).preempted = false;
+                            }
+                            else
+                            {
+                                printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff + "ms burst", ready_queue);
+                            }
                         }
                         addArived(processes, ready_queue, curr_time);
                     }
@@ -184,13 +169,74 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
                     curr_process = NULL;
                 }
             }
+            // The time slice has been hit
+            // preempt any process that is being performed and add it to the beginning or end of the ready queue
+            // adding to beginning or end depends on rr_add
+            else if (curr_time_slice == time_slice)
+            {
+                curr_time_slice = 1;
+                // Only preempt if there are other processes on the ready queue
+                if (ready_queue.size())
+                {
+                    sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
+                    printEvent(curr_time, std::string("Time slice expired; process ") + (*curr_process).name + " preempted with " + buff + "ms to go", ready_queue);
+                    (*curr_process).preempted = true;
+                    num_preempt++;
+                    // Preempt the process and add the next process in the queue with a context switch
+                    addArived(processes, ready_queue, curr_time);
+                    num_context_switch++;
+                    for (int j = 0; j < context_time / 2; j++)
+                    {
+                        incWaitTime(ready_queue);
+                        curr_time++;
+                        addArived(processes, ready_queue, curr_time);
+                    }
+                    preemptProcess(curr_process, ready_queue, rr_add);
+                    if (ready_queue.size())
+                    {
+                        //take what we think is the next process
+                        curr_process = ready_queue[0];
+                        ready_queue.erase(ready_queue.begin());
+
+                        //do the context switch time to load it in
+                        for (int j = 0; j < context_time / 2; j++)
+                        {
+                            incWaitTime(ready_queue);
+                            curr_time++;
+                            if (j == context_time / 2 - 1)
+                            {
+                                sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
+                                if ((*curr_process).preempted)
+                                {
+                                    printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
+                                    (*curr_process).preempted = false;
+                                }
+                                else
+                                {
+                                    printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff + "ms burst", ready_queue);
+                                }
+                            }
+                            addArived(processes, ready_queue, curr_time);
+                        }
+                    }
+                    else
+                    {
+                        curr_process = NULL;
+                    }
+                }
+                // ready queue is empty
+                else
+                {
+                    printEvent(curr_time, std::string("Time slice expired; no preemption because ready queue is empty"), ready_queue);
+                }
+            }
             else
             {
                 addArived(processes, ready_queue, curr_time);
+                curr_time_slice++;
             }
         }
         incWaitTime(ready_queue);
-        curr_time_slice++;
         curr_time++;
     }
     //decrease current time by one because it add one before but its not actually another tick
@@ -201,6 +247,6 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
     ret_vals.push_back(calcAvgVal(wait_times));
     ret_vals.push_back(calcAvgVal(turn_times));
     ret_vals.push_back(double(num_context_switch));
-    ret_vals.push_back(0.0);
+    ret_vals.push_back(double(num_preempt));
     return ret_vals;
 }
