@@ -289,8 +289,8 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
                     if (j == context_time / 2 - 1)
                     {
                         sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
-
-                        printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
+                        sprintf(buff2, "%d", (*curr_process).tau);
+                        printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
                         (*curr_process).preempted = false;
                     }
                     SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process,true);
