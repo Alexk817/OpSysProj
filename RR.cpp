@@ -26,6 +26,7 @@ void RR_popQueifPossible(std::vector<Process *> &ready_queue, Process *&curr_pro
 {
     if (ready_queue.size())
     {
+        std::cerr << curr_time << " " << curr_time_slice << std::endl;
         //take what we think is the next process
         curr_process = (ready_queue[0]);
         ready_queue.erase(ready_queue.begin());
@@ -68,7 +69,7 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
     ret_vals.push_back(calcAvgCPUBurst(processes));
     int num_context_switch = 0;
     int num_preempt = 0;
-    int curr_time_slice = 0;
+    int curr_time_slice = 1;
     printEvent(curr_time, "Simulator started for RR", ready_queue);
 
     // While there are still processes running
@@ -80,59 +81,65 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
             addArived(processes, ready_queue, curr_time);
             RR_popQueifPossible(ready_queue, curr_process, curr_time, processes, context_time, buff, curr_time_slice);
         }
-        // The time slice has been hit
-        // preempt any process that is being performed and add it to the beginning or end of the ready queue
-        // adding to beginning or end depends on rr_add
-        else if (curr_time_slice == time_slice)
+        else
         {
-            curr_time_slice = 0;
-            // Only preempt if there are other processes on the ready queue
-            if (ready_queue.size())
+            // The time slice has been hit
+            // preempt any process that is being performed and add it to the beginning or end of the ready queue
+            // adding to beginning or end depends on rr_add
+            if (curr_time_slice == time_slice)
             {
-                sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
-                printEvent(curr_time, std::string("Time slice expired; process ") + (*curr_process).name + " preempted with " + buff + "ms to go", ready_queue);
-                preemptProcess(curr_process, ready_queue, rr_add);
-                num_preempt++;
-                // Preempt the process and add the next process in the queue with a context switch
-                addArived(processes, ready_queue, curr_time);
-                num_context_switch++;
-                for (int j = 0; j < context_time / 2; j++)
-                {
-                    incWaitTime(ready_queue);
-                    curr_time++;
-                    addArived(processes, ready_queue, curr_time);
-                }
+                curr_time_slice = 1;
+                // Only preempt if there are other processes on the ready queue
                 if (ready_queue.size())
                 {
-                    //take what we think is the next process
-                    curr_process = ready_queue[0];
-                    ready_queue.erase(ready_queue.begin());
-
-                    //do the context switch time to load it in
+                    sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
+                    printEvent(curr_time, std::string("Time slice expired; process ") + (*curr_process).name + " preempted with " + buff + "ms to go", ready_queue);
+                    preemptProcess(curr_process, ready_queue, rr_add);
+                    num_preempt++;
+                    // Preempt the process and add the next process in the queue with a context switch
+                    addArived(processes, ready_queue, curr_time);
+                    num_context_switch++;
                     for (int j = 0; j < context_time / 2; j++)
                     {
                         incWaitTime(ready_queue);
                         curr_time++;
-                        if (j == context_time / 2 - 1)
-                        {
-                            sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
-
-                            printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff + "ms burst", ready_queue);
-                        }
                         addArived(processes, ready_queue, curr_time);
                     }
+                    if (ready_queue.size())
+                    {
+                        //take what we think is the next process
+                        curr_process = ready_queue[0];
+                        ready_queue.erase(ready_queue.begin());
+
+                        //do the context switch time to load it in
+                        for (int j = 0; j < context_time / 2; j++)
+                        {
+                            incWaitTime(ready_queue);
+                            curr_time++;
+                            if (j == context_time / 2 - 1)
+                            {
+                                sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
+
+                                printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff + "ms burst", ready_queue);
+                            }
+                            addArived(processes, ready_queue, curr_time);
+                        }
+                    }
+                    else
+                    {
+                        curr_process = NULL;
+                    }
                 }
+                // ready queue is empty
                 else
                 {
-                    curr_process = NULL;
+                    printEvent(curr_time, std::string("Time slice expired; no preemption because ready queue is empty"), ready_queue);
                 }
             }
-        }
-        else
-        {
             // If the current process ends in this timeslot
-            if (!--(*curr_process).CPU_bursts[(*curr_process).burst_num].first)
+            else if (!--(*curr_process).CPU_bursts[(*curr_process).burst_num].first)
             {
+                curr_time_slice = 1;
                 // add for turnaround times, wait times to vectors
                 turn_times.push_back(curr_time - (*curr_process).arrival + (context_time / 2));
                 wait_times.push_back((*curr_process).wait_time);
