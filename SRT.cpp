@@ -18,13 +18,16 @@ struct SRT_compareTimeleft
 {
     bool operator()(Process *&a, Process *&b)
     {
-        if ((*a).working_tau > (*b).working_tau)
+        if (a->working_tau > a->working_tau)
         {
+
+			std::cerr << "old : " << a->working_tau << " New : " << b->tau << " resulted in " << false <<  std::endl;
+	
             return false;
         }
-        else if ((*a).working_tau == (*b).working_tau)
+        else if (a->working_tau == a->working_tau)
         {
-            return ((*a).name < (*b).name);
+            return (a->name < a->name);
         }
         return true;
     }
@@ -35,12 +38,13 @@ void SRT_preemptProcess(Process *&curr_process, std::vector<Process *> &ready_qu
 {
     
     ready_queue.push_back(curr_process);
-     std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
-   
+    std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
+
+    
     curr_process = NULL;
 }
 
-void SRT_addArived(std::vector<Process> &processes, std::vector<Process *> &ready_queue, int &curr_time, char *buff2, Process* &curr_process)
+void SRT_addArived(std::vector<Process> &processes, std::vector<Process *> &ready_queue, int &curr_time, char *buff2)
 {
     for (unsigned int i = 0; i < processes.size(); i++)
     {
@@ -48,31 +52,19 @@ void SRT_addArived(std::vector<Process> &processes, std::vector<Process *> &read
         if (processes[i].arrival == curr_time)
         {
             ready_queue.push_back(&processes[i]);
-             std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
+            std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
+
             //if it just arrived print this message
             if (processes[i].burst_num == 0)
             {
                 sprintf(buff2, "%d", processes[i].tau);
-                if (curr_process && processes[i].working_tau < (*curr_process).working_tau){
-                	printEvent(curr_time, std::string("Process ") + processes[i].name + " (tau " + buff2 + "ms)" + " arrived; preempting "+ (*curr_process).name, ready_queue);
-                	curr_process->preempted = true;
-                }
-                else {
-                	printEvent(curr_time, std::string("Process ") + processes[i].name + " (tau " + buff2 + "ms)" + " arrived; added to ready queue", ready_queue);
-                }
-                
+                printEvent(curr_time, std::string("Process ") + processes[i].name + " (tau " + buff2 + "ms)" + " arrived; added to ready queue", ready_queue);
             }
             //otherwise its retruning from i/o so print this
             else
             {
                 sprintf(buff2, "%d", processes[i].tau);
-                if (curr_process && processes[i].working_tau < (*curr_process).working_tau){
-                	printEvent(curr_time, std::string("Process ") + processes[i].name + " (tau " + buff2 + "ms)" + " completed I/O; preempting "+ (*curr_process).name, ready_queue);
-                	curr_process->preempted = true;
-                }
-                else {
-               		printEvent(curr_time, std::string("Process ") + processes[i].name + " (tau " + buff2 + "ms)" + " completed I/O; added to ready queue", ready_queue);
-               	}
+                printEvent(curr_time, std::string("Process ") + processes[i].name + " (tau " + buff2 + "ms)" + " completed I/O; added to ready queue", ready_queue);
             }
         }
     }
@@ -80,13 +72,14 @@ void SRT_addArived(std::vector<Process> &processes, std::vector<Process *> &read
 
 void SRT_popQueifPossible(std::vector<Process *> &ready_queue, Process *&curr_process, int &curr_time, std::vector<Process> &processes, int &context_time, char *buff, char *buff2)
 {
+
     if (ready_queue.size())
     {
         //take what we think is the next process
-        
+         
         curr_process = (ready_queue[0]);
         ready_queue.erase(ready_queue.begin());
-        
+      
 
         //do the context switch time to load it in
         for (int j = 0; j < context_time / 2; j++)
@@ -97,10 +90,9 @@ void SRT_popQueifPossible(std::vector<Process *> &ready_queue, Process *&curr_pr
             {
                 sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
                 sprintf(buff2, "%d", (*curr_process).tau);
-                printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
-
+                printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU for " + buff + "ms burst", ready_queue);
             }
-            SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
+            SRT_addArived(processes, ready_queue, curr_time, buff2);
         }
     }
 }
@@ -132,59 +124,24 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
     int num_context_switch = 0;
     int num_preempt = 0;
     printEvent(curr_time, "Simulator started for SRT", ready_queue);
-    bool just_preempt = false;
 
     // While there are still processes running
     while (active_processes.size())
     {
-    	just_preempt = false;
+    	
         // If there is not a current process being run
         if (!curr_process)
         {
-            SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
+            SRT_addArived(processes, ready_queue, curr_time, buff2);
             SRT_popQueifPossible(ready_queue, curr_process, curr_time, processes, context_time, buff, buff2);
         }
+        //otherwise there is a current process
         else
         {
-        	if (curr_process->preempted)
-        	{
-        		just_preempt = true;
-        		(*curr_process).working_tau++;
-                (*curr_process).preempted = true;
-                num_preempt++;
-                // Preempt the process and add the next process in the queue with a context switch
-                num_context_switch++;
-                for (int j = 1; j < context_time / 2; j++)
-                {
-                    incWaitTime(ready_queue);
-                    curr_time++;
-                    SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
-                }
-                SRT_preemptProcess(curr_process, ready_queue);
-            
-                //take what we think is the next process
-                curr_process = ready_queue[0];
-                ready_queue.erase(ready_queue.begin());
-                //do the context switch time to load it in
-                for (int j = 0; j < context_time / 2; j++)
-                {
-                    incWaitTime(ready_queue);
-                    curr_time++;
-                    if (j == context_time / 2 - 1)
-                    {
-                        sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
-                            printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
-                            (*curr_process).preempted = false;
-                    }
-                    SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
-                }
-
-                 (*curr_process).working_tau++;
-                 (*curr_process).CPU_bursts[(*curr_process).burst_num].first++;
-        	}
-            // If the current process ends in this timeslot
-            (*curr_process).working_tau--;
-            if (!--(*curr_process).CPU_bursts[(*curr_process).burst_num].first && !just_preempt)
+        	//decrement the current working tau and the actual time
+        	curr_process->working_tau--;
+            // either the current process ends in this timeslot*******************************************************************************************************
+            if (!--(*curr_process).CPU_bursts[(*curr_process).burst_num].first)
             {
                 // add for turnaround times, wait times to vectors
                 turn_times.push_back(curr_time - (*curr_process).arrival + (context_time / 2));
@@ -233,20 +190,21 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
                     printEvent(curr_time, std::string("Process ") + (*curr_process).name + " switching out of CPU; will block on I/O until time " + buff + "ms", ready_queue);
                     //on to the next burse set
 
+                    //Recalculated tau = 1016ms for process A
                 }
                 // In a context switch it out
-                SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
+                SRT_addArived(processes, ready_queue, curr_time, buff2);
                 num_context_switch++;
                 for (int j = 0; j < context_time / 2; j++)
                 {
                     incWaitTime(ready_queue);
                     curr_time++;
-                    SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
+                    SRT_addArived(processes, ready_queue, curr_time, buff2);
                 }
                 if (ready_queue.size())
                 {
                     //take what we think is the next process
-                   
+                    
                     curr_process = (ready_queue[0]);
                     ready_queue.erase(ready_queue.begin());
                     
@@ -260,11 +218,9 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
                         {
                             sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
                             sprintf(buff2, "%d", (*curr_process).tau);
-                                printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
-                                (*curr_process).preempted = false;
-                          
+                            printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU for " + buff + "ms burst", ready_queue);
                         }
-                        SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
+                        SRT_addArived(processes, ready_queue, curr_time, buff2);
                     }
                 }
                 else
@@ -272,34 +228,37 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
                     curr_process = NULL;
                 }
             }
-             // Preempt if neccessary
-            // preempt any process that is being performed and add it to the beginning or end of the ready queue
-            // adding to beginning or end depends on rr_add
-            else if (ready_queue.size() && SRT_compareTimeleft()(ready_queue[0],curr_process))
-            {
-                
-               
+            SRT_addArived(processes, ready_queue, curr_time, buff2);
+            //or it should be preempted this timeslot************************************************************************************************************8
+             //otherwise it might need to be prempted
+            if (curr_process && ready_queue.size()){ //&& 
+            	std::cerr << SRT_compareTimeleft()(curr_process,ready_queue[0]) << std::endl;
+          //  {
+           /*     std::cerr << "old : " << curr_process->working_tau << " New : " << ready_queue[0]->tau << " resulted in " << SRT_compareTimeleft()(ready_queue[0],curr_process) <<  std::endl;
+                // Only preempt if there are other processes on the ready queue
                 
                 sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
-                //TODO FIND Correct Input
                 printEvent(curr_time, std::string("Process ") + (*curr_process).name + " preempted with " + buff + "ms to go", ready_queue);
-                //std::cerr << "New tau: " << (*ready_queue[0]).working_tau << " Old Tau: " << (*curr_process).working_tau << std::endl;
                 (*curr_process).preempted = true;
                 num_preempt++;
                 // Preempt the process and add the next process in the queue with a context switch
-                SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
+                //SRT_addArived(processes, ready_queue, curr_time, buff2);
                 num_context_switch++;
                 for (int j = 0; j < context_time / 2; j++)
                 {
                     incWaitTime(ready_queue);
                     curr_time++;
-                    SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
+                    if (j == context_time / 2 - 1)
+                    {
+                        SRT_preemptProcess(curr_process, ready_queue);
+                    }
+                    SRT_addArived(processes, ready_queue, curr_time, buff2);
                 }
-                SRT_preemptProcess(curr_process, ready_queue);
-            
+               
                 //take what we think is the next process
                 curr_process = ready_queue[0];
                 ready_queue.erase(ready_queue.begin());
+
                 //do the context switch time to load it in
                 for (int j = 0; j < context_time / 2; j++)
                 {
@@ -308,34 +267,18 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
                     if (j == context_time / 2 - 1)
                     {
                         sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
-                        // if ((*curr_process).preempted)
-                        // {
-                            printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
-                            (*curr_process).preempted = false;
-                        // }
-                        // else
-                        // {
-                        //     printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff + "ms burst", ready_queue);
-                        // }
+                        
+                        printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
+                        (*curr_process).preempted = false;
+                        
+                       
                     }
-                    SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
+                    SRT_addArived(processes, ready_queue, curr_time, buff2);
                 }
-                    
-                    // else
-                    // {
-                    //     curr_process = NULL;
-                    // }
-                
-                // ready queue is empty
-               // else
-                //{
-                //    printEvent(curr_time, std::string("Time slice expired; no preemption because ready queue is empty"), ready_queue);
-                //}
+            }*/
             }
-            else
-            {
-                SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
-            }
+            //or just keep chugging away at cpu*********************************************************************************************************************
+           
         }
         incWaitTime(ready_queue);
         curr_time++;
