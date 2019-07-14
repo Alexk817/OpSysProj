@@ -5,7 +5,7 @@ Alexander Kim - kima11
 */
 
 #include "helper.h"
-#include "process.h"
+#include "Process.h"
 #include <iostream>
 #include <fstream>
 #include <string>

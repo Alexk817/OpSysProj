@@ -6,7 +6,7 @@ Alexander Kim - kima11
 
 #ifndef __helper_h__
 #define __helper_h__
-#include "process.h"
+#include "Process.h"
 #include <iostream>
 #include <fstream>
 #include <string>
