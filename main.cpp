@@ -145,7 +145,7 @@ int main(int argc, char const *argv[])
 		}
 		else
 		{
-			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst  (tau " << processes[i].tau << "ms)\n";
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst (tau " << processes[i].tau << "ms)\n";
 		}
 	}
 	std::vector<double> res_SJF = SJF(processes, time_context_switch);
@@ -160,7 +160,7 @@ int main(int argc, char const *argv[])
 		}
 		else
 		{
-			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst  (tau " << processes[i].tau << "ms)\n";
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst (tau " << processes[i].tau << "ms)\n";
 		}
 	}
 	std::vector<double> res_SRT = SRT(processes, time_context_switch);

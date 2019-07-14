@@ -14,19 +14,22 @@ int tauGuess(int lastTau, float alpha, int lastTime)
 
 void printEvent(int time, std::string detail, std::vector<Process *> que)
 {
-    std::cout << "time " << time << "ms: " << detail << " [Q";
-    if (que.size())
+    if (time <= 999 || detail.find("terminated") != std::string::npos || detail.find("ended") != std::string::npos)
     {
-        for (unsigned int i = 0; i < que.size(); i++)
+        std::cout << "time " << time << "ms: " << detail << " [Q";
+        if (que.size())
         {
-            std::cout << " " << (*que[i]).name;
+            for (unsigned int i = 0; i < que.size(); i++)
+            {
+                std::cout << " " << (*que[i]).name;
+            }
         }
+        else
+        {
+            std::cout << " <empty>";
+        }
+        std::cout << "]" << std::endl;
     }
-    else
-    {
-        std::cout << " <empty>";
-    }
-    std::cout << "]" << std::endl;
 }
 
 double calcAvgCPUBurst(std::vector<Process> &processes)
