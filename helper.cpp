@@ -65,15 +65,16 @@ void popQueifPossible(std::vector<Process*> &ready_queue, Process* &curr_process
         curr_process = (ready_queue[0]);
         ready_queue.erase(ready_queue.begin());
         //do the context switch time to load it in
-         for (int j = 0; j < context_time/2; j++) {
+        for (int j = 0; j < context_time/2; j++) {
             incWaitTime(ready_queue);
             curr_time++;
-            addArived(processes,ready_queue,curr_time);
-        }
-        //now we ready to go
-        sprintf(buff,"%d",(*curr_process).CPU_bursts[(*curr_process).burst_num].first );
+           if (j == context_time/2 -1){
+                 sprintf(buff,"%d",(*curr_process).CPU_bursts[(*curr_process).burst_num].first );
 
-        printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff  +"ms burst",ready_queue);
+                 printEvent(curr_time, std::string("Process ") + (*curr_process).name + " started using the CPU for " + buff  +"ms burst",ready_queue);
+            }
+            addArived(processes,ready_queue,curr_time);
+         }
         
     }
  }
