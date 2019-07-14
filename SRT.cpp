@@ -102,7 +102,7 @@ void SRT_popQueifPossible(std::vector<Process *> &ready_queue, Process *&curr_pr
             {
                 sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
                 sprintf(buff2, "%d", (*curr_process).tau);
-                printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU for " + buff + "ms burst", ready_queue);
+                printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
             }
             SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
         }
@@ -230,7 +230,7 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
                         {
                             sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
                             sprintf(buff2, "%d", (*curr_process).tau);
-                            printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU for " + buff + "ms burst", ready_queue);
+                            printEvent(curr_time, std::string("Process ") + (*curr_process).name + " (tau " + buff2 + "ms)" + " started using the CPU with " + buff + "ms burst remaining", ready_queue);
                         }
                         SRT_addArived(processes, ready_queue, curr_time, buff2,curr_process);
                     }
