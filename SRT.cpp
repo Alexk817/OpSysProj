@@ -29,7 +29,7 @@ void SRT_preemptProcess(Process *&curr_process, std::vector<Process *> &ready_qu
 {
     
     ready_queue.push_back(curr_process);
-    std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
+    //std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
     curr_process = NULL;
 }
 
@@ -41,7 +41,7 @@ void SRT_addArived(std::vector<Process> &processes, std::vector<Process *> &read
         if (processes[i].arrival == curr_time)
         {
             ready_queue.push_back(&processes[i]);
-            std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
+            //std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
 
             //if it just arrived print this message
             if (processes[i].burst_num == 0)
@@ -77,9 +77,10 @@ void SRT_popQueifPossible(std::vector<Process *> &ready_queue, Process *&curr_pr
     if (ready_queue.size())
     {
         //take what we think is the next process
+        std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
         curr_process = (ready_queue[0]);
         ready_queue.erase(ready_queue.begin());
-        std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
+        
 
         //do the context switch time to load it in
         for (int j = 0; j < context_time / 2; j++)
@@ -144,7 +145,7 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
         		just_preempt = true;
         		(*curr_process).working_tau++;
         		//(*curr_process).CPU_bursts[(*curr_process).burst_num].first;
-        		std::cerr << "New tau: " << (*ready_queue[0]).working_tau << " Old Tau: " << (*curr_process).working_tau << std::endl;
+        		//std::cerr << "New tau: " << (*ready_queue[0]).working_tau << " Old Tau: " << (*curr_process).working_tau << std::endl;
                 (*curr_process).preempted = true;
                 num_preempt++;
                 // Preempt the process and add the next process in the queue with a context switch
@@ -249,9 +250,10 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
                 if (ready_queue.size())
                 {
                     //take what we think is the next process
+                    std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
                     curr_process = (ready_queue[0]);
                     ready_queue.erase(ready_queue.begin());
-                    std::sort(ready_queue.begin(), ready_queue.end(), SRT_compareTimeleft());
+                    
 
                     //do the context switch time to load it in
                     for (int j = 0; j < context_time / 2; j++)
@@ -292,7 +294,7 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
                 sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
                 //TODO FIND Correct Input
                 printEvent(curr_time, std::string("Process ") + (*curr_process).name + " preempted with " + buff + "ms to go", ready_queue);
-                std::cerr << "New tau: " << (*ready_queue[0]).working_tau << " Old Tau: " << (*curr_process).working_tau << std::endl;
+                //std::cerr << "New tau: " << (*ready_queue[0]).working_tau << " Old Tau: " << (*curr_process).working_tau << std::endl;
                 (*curr_process).preempted = true;
                 num_preempt++;
                 // Preempt the process and add the next process in the queue with a context switch
