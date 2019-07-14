@@ -12,21 +12,21 @@
 int tauGuess(int lastTau, float alpha, int lastTime);
 
 // Printing for the CPU sceduling algorithms
-void printEvent(int time, std::string detail, std::vector<Process*> que);
+void printEvent(int time, std::string detail, std::vector<Process *> que);
 
 // Calculate average CPU burst time
 double calcAvgCPUBurst(std::vector<Process> &processes);
 
 // Increment wait times for processes in the vector
-void incWaitTime(std::vector<Process*> &ready_queue);
+void incWaitTime(std::vector<Process *> &ready_queue);
 
 // Check if processes have arrived
-void addArived(std::vector<Process> &processes,std::vector<Process*> &ready_queue,int &curr_time);
+void addArived(std::vector<Process> &processes, std::vector<Process *> &ready_queue, int &curr_time);
 
 // Pop the element from ready queue if available
-void popQueifPossible(std::vector<Process*> &ready_queue, Process* &curr_process, int &curr_time ,std::vector<Process> &processes, int &context_time,char* buff );
+void popQueifPossible(std::vector<Process *> &ready_queue, Process *&curr_process, int &curr_time, std::vector<Process> &processes, int &context_time, char *buff);
 
-// Caclulate the average of a vector
+// Calculate the average of a vector
 double calcAvgVal(std::vector<int> times);
 
 #endif

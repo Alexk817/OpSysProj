@@ -51,7 +51,6 @@ std::vector<double> RR(std::vector<Process> processes, int context_time, int tim
     // While there are still processes running
     while (active_processes.size())
     {
-
         // If there is not a current process being run
         if (!curr_process)
         {

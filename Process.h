@@ -7,15 +7,16 @@
 #include <algorithm>
 
 /* This class represents process that the CPU will run */
-class Process {
+class Process
+{
 public:
-    Process(char aName, int aArrival, std::vector<std::pair<int, int> > aCPUBursts, int initTau, double tAlpha );
+    Process(char aName, int aArrival, std::vector<std::pair<int, int>> aCPUBursts, int initTau, double tAlpha);
     void updateTau();
     char name;
     int arrival;
     int end;
     int burst_num;
-    std::vector<std::pair<int, int> > CPU_bursts;
+    std::vector<std::pair<int, int>> CPU_bursts;
     std::string status;
     int tau;
     int wait_time;
