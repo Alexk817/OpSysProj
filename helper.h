@@ -1,3 +1,9 @@
+/*
+Jack Cherella - cherj
+Jason Durr - durrj2
+Alexander Kim - kima11
+*/
+
 #ifndef __helper_h__
 #define __helper_h__
 #include "process.h"

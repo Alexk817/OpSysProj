@@ -1,3 +1,9 @@
+/*
+Jack Cherella - cherj
+Jason Durr - durrj2
+Alexander Kim - kima11
+*/
+
 #include "CPUScheduling.h"
 #include "Process.h"
 #include <iostream>
