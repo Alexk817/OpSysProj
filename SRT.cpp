@@ -231,8 +231,8 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
             SRT_addArived(processes, ready_queue, curr_time, buff2);
             //or it should be preempted this timeslot************************************************************************************************************8
              //otherwise it might need to be prempted
-            if (curr_process && ready_queue.size() && SRT_compareTimeleft()(curr_process,ready_queue[0])) {
-                std::cerr << "old : " << curr_process->working_tau << " New : " << ready_queue[0]->tau << " resulted in " << SRT_compareTimeleft()(curr_process,ready_queue[0]) <<  std::endl;
+            if (curr_process && ready_queue.size() && SRT_compareTimeleft()(ready_queue[0],curr_process)) {
+                std::cerr << "old : " << curr_process->working_tau << " New : " << ready_queue[0]->tau << " resulted in " << SRT_compareTimeleft()(ready_queue[0],curr_process) <<  std::endl;
                 // Only preempt if there are other processes on the ready queue
                 
                 sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
