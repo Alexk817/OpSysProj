@@ -12,10 +12,10 @@
 std::vector<double> FCFS(std::vector<Process> processes, int context_time);
 
 /* Will be the Shortest Job First CPU scheduling algorithm */
-void SJF();
+std::vector<double> SJF(std::vector<Process> processes, int context_time);
 
 /* Will be the Shortest Remaining Time CPU scheduling algorithm */
-void SRT();
+std::vector<double> SRT(std::vector<Process> processes, int context_time);
 
 /* Will be the Round Robin CPU scheduling algorithm */
 void RR();
