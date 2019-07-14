@@ -7,7 +7,12 @@
 #include <stdlib.h>
 #include "helper.h"
 
-std::vector<double> RR(std::vector<Process> processes, int context_time) {
+// Function to preempt a process and add it to the end or beginning of the ready queue
+void preemptProcess(Process *) {
+    
+}
+
+std::vector<double> RR(std::vector<Process> processes, int context_time, int time_slice, std::string rr_add) {
     // Vector to act as the ready queue
     std::vector<Process*> ready_queue;
     //Vector of processes still active
@@ -28,6 +33,8 @@ std::vector<double> RR(std::vector<Process> processes, int context_time) {
     std::vector<double> ret_vals; 
     ret_vals.push_back(calcAvgCPUBurst(processes));
     int num_context_switch = 0;
+    int num_preempt = 0;
+    int curr_time_slice = 0;
     printEvent(curr_time,"Simulator started for RR",ready_queue);
 
 
@@ -39,6 +46,14 @@ std::vector<double> RR(std::vector<Process> processes, int context_time) {
         if (!curr_process) {
            addArived(processes,ready_queue,curr_time);
            popQueifPossible(ready_queue, curr_process, curr_time ,processes,context_time,buff);
+        }
+        // The time slice has been hit 
+        // preempt any process that is being performed and add it to the beginning or end of the ready queue
+        // adding to beginning or end depends on rr_add
+        else if (curr_time_slice == time_slice) {
+            curr_time_slice = 0;
+            // Preempt the process and add the next process in the queue with a context switch
+
         }
         else {
             // If the current process ends in this timeslot
@@ -118,6 +133,7 @@ std::vector<double> RR(std::vector<Process> processes, int context_time) {
             
         }
         incWaitTime(ready_queue);
+        curr_time_slice++;
         curr_time++;
     }
     //decrease current time by one because it add one before but its not actually another tick
