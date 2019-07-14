@@ -18,16 +18,16 @@ struct SRT_compareTimeleft
 {
     bool operator()(Process *&a, Process *&b)
     {
-        if (a->working_tau > a->working_tau)
+        if (a->working_tau > b->working_tau)
         {
 
-			std::cerr << "old : " << a->working_tau << " New : " << b->tau << " resulted in " << false <<  std::endl;
+			
 	
             return false;
         }
-        else if (a->working_tau == a->working_tau)
+        else if (a->working_tau == b->working_tau)
         {
-            return (a->name < a->name);
+            return (a->name < b->name);
         }
         return true;
     }
@@ -231,10 +231,8 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
             SRT_addArived(processes, ready_queue, curr_time, buff2);
             //or it should be preempted this timeslot************************************************************************************************************8
              //otherwise it might need to be prempted
-            if (curr_process && ready_queue.size()){ //&& 
-            	std::cerr << SRT_compareTimeleft()(curr_process,ready_queue[0]) << std::endl;
-          //  {
-           /*     std::cerr << "old : " << curr_process->working_tau << " New : " << ready_queue[0]->tau << " resulted in " << SRT_compareTimeleft()(ready_queue[0],curr_process) <<  std::endl;
+            if (curr_process && ready_queue.size() && SRT_compareTimeleft()(curr_process,ready_queue[0])) {
+                std::cerr << "old : " << curr_process->working_tau << " New : " << ready_queue[0]->tau << " resulted in " << SRT_compareTimeleft()(curr_process,ready_queue[0]) <<  std::endl;
                 // Only preempt if there are other processes on the ready queue
                 
                 sprintf(buff, "%d", (*curr_process).CPU_bursts[(*curr_process).burst_num].first);
@@ -275,7 +273,7 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time)
                     }
                     SRT_addArived(processes, ready_queue, curr_time, buff2);
                 }
-            }*/
+         
             }
             //or just keep chugging away at cpu*********************************************************************************************************************
            
