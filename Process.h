@@ -1,3 +1,9 @@
+/*
+Jack Cherella - cherj
+Jason Durr - durrj2
+Alexander Kim - kima11
+*/
+
 #ifndef __Process_h__
 #define __Process_h__
 #include <vector>

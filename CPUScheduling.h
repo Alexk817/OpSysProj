@@ -1,3 +1,9 @@
+/*
+Jack Cherella - cherj
+Jason Durr - durrj2
+Alexander Kim - kima11
+*/
+
 #ifndef __CPUScheduling_h__
 #define __CPUScheduling_h__
 #include "Process.h"
@@ -21,6 +27,6 @@ std::vector<double> SRT(std::vector<Process> processes, int context_time);
 std::vector<double> RR(std::vector<Process> processes, int context_time, int time_slice, std::string rr_add);
 
 /* Will be used to override the > operator*/
-bool operator >(const Process proc_one, const Process proc_two);
+bool operator>(const Process proc_one, const Process proc_two);
 
 #endif

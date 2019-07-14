@@ -1,3 +1,9 @@
+/*
+Jack Cherella - cherj
+Jason Durr - durrj2
+Alexander Kim - kima11
+*/
+
 #include <vector>
 #include <utility>
 #include <stdlib.h>
