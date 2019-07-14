@@ -38,7 +38,7 @@ void SJF_addArived(std::vector<Process> &processes, std::vector<Process *> &read
         if (processes[i].arrival == curr_time)
         {
             ready_queue.push_back(&processes[i]);
-            //std::sort(ready_queue.begin(), ready_queue.end(), compareTimeleft());
+            std::sort(ready_queue.begin(), ready_queue.end(), compareTimeleft());
 
             //if it just arrived print this message
             if (processes[i].burst_num == 0)
@@ -61,7 +61,7 @@ void SJF_popQueifPossible(std::vector<Process *> &ready_queue, Process *&curr_pr
     if (ready_queue.size())
     {
         //take what we think is the next process
-          std::sort(ready_queue.begin(), ready_queue.end(), compareTimeleft());
+         
         curr_process = (ready_queue[0]);
         ready_queue.erase(ready_queue.begin());
       
@@ -185,7 +185,7 @@ std::vector<double> SJF(std::vector<Process> processes, int context_time)
                 if (ready_queue.size())
                 {
                     //take what we think is the next process
-                    std::sort(ready_queue.begin(), ready_queue.end(), compareTimeleft());
+                    
                     curr_process = (ready_queue[0]);
                     ready_queue.erase(ready_queue.begin());
                     
