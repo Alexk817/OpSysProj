@@ -36,7 +36,7 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 		int arrival = x;
 		r = drand48();
 		int num_bursts = floor(r * 100) + 1;
-		std::vector<std::pair<int, int>> burst_times;
+		std::vector<std::pair<int, int> > burst_times;
 		for (int j = 0; j < num_bursts; j++)
 		{
 			std::pair<int, int> temp_pair;

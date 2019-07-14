@@ -6,7 +6,7 @@
 #include "helper.h"
 #include <algorithm>
 
-Process::Process(char aName, int aArrival, std::vector<std::pair<int, int>> aCPUBursts, int initTau, double tAlpha)
+Process::Process(char aName, int aArrival, std::vector<std::pair<int, int> > aCPUBursts, int initTau, double tAlpha)
 {
     name = aName;
     arrival = aArrival;
@@ -16,6 +16,7 @@ Process::Process(char aName, int aArrival, std::vector<std::pair<int, int>> aCPU
     status = "READY";
     alpha = tAlpha;
     tau = initTau;
+    working_tau = tau;
     next_tau = tauGuess(tau, alpha, CPU_bursts[burst_num].first);
     wait_time = 0;
     preempted = false;
@@ -23,5 +24,6 @@ Process::Process(char aName, int aArrival, std::vector<std::pair<int, int>> aCPU
 void Process::updateTau()
 {
     tau = next_tau;
+    working_tau = tau;
     next_tau = tauGuess(tau, alpha, CPU_bursts[burst_num].first);
 }
