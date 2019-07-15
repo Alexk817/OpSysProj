@@ -22,9 +22,7 @@ void printEvent(int time, std::string detail, std::vector<Process *> que)
 {
     // if (time <= 999 || detail.find("terminated") != std::string::npos || detail.find("ended") != std::string::npos)
     //  {
-        if ( detail.find("terminated") != std::string::npos ){
-            std::cerr << detail << std::endl;
-        }
+        
         std::cout << "time " << time << "ms: " << detail << " [Q";
         if (que.size())
         {
