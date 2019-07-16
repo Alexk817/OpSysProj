@@ -34,5 +34,6 @@ void Process::updateTau()
     tau = next_tau;
     working_tau = tau;
     next_tau = tauGuess(tau, alpha, CPU_bursts[burst_num].first);
+    SIO_tau = SIO_next_tau;
     SIO_next_tau = tauGuess(tau, alpha, CPU_bursts[burst_num].second);
 }

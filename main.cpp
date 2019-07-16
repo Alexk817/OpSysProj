@@ -42,7 +42,7 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 		int arrival = x;
 		r = drand48();
 		int num_bursts = floor(r * 100) + 1;
-		std::vector<std::pair<int, int>> burst_times;
+		std::vector<std::pair<int, int> > burst_times;
 		for (int j = 0; j < num_bursts; j++)
 		{
 			std::pair<int, int> temp_pair;
@@ -91,7 +91,7 @@ void finalOutput(std::ofstream &simout, std::vector<double> data, std::string al
 	simout << "-- total number of context switches: " << int(data[3]) << std::endl;
 	simout << "-- total number of preemptions: " << int(data[4]) << std::endl;
 }
-
+//1: seed2: lambda3: upperbound4: numprocesses5: context switch time6: alpha 7: time_slice8: beginning end
 int main(int argc, char const *argv[])
 {
 	// Reading in Arguments
