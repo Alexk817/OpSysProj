@@ -42,13 +42,13 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 		int arrival = x;
 		r = drand48();
 		int num_bursts = floor(r * 100) + 1;
-		std::vector<std::pair<int, int> > burst_times;
+		std::vector<std::pair<int, int>> burst_times;
 		for (int j = 0; j < num_bursts; j++)
 		{
 			std::pair<int, int> temp_pair;
 			r = drand48();
 			x = ceil(-log(r) / lambda);
-			while (x > upper_bound)
+			while (x > upper_bound / 4)
 			{
 				r = drand48();
 				x = ceil(-log(r) / lambda);
@@ -59,7 +59,7 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 			{
 				r = drand48();
 				x = ceil(-log(r) / lambda);
-				while (x > upper_bound / 4)
+				while (x > upper_bound)
 				{
 					r = drand48();
 					x = ceil(-log(r) / lambda);
@@ -208,7 +208,7 @@ int main(int argc, char const *argv[])
 	finalOutput(simout, res_SJF, "SJF");
 	finalOutput(simout, res_SRT, "SRT");
 	finalOutput(simout, res_RR, "RR");
-	finalOutput(simout, res_SIO, "SIO");
+	finalOutput(simout, res_SIO, "LIO");
 	simout.close();
 
 	return EXIT_SUCCESS;
