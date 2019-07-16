@@ -18,7 +18,7 @@ struct SIO_compareTimeleft
 {
     bool operator()(Process *&a, Process *&b)
     {
-        if ((*a).SIO_tau > (*b).SIO_tau)
+        if ((*a).SIO_tau < (*b).SIO_tau)
         {
             return false;
         }
