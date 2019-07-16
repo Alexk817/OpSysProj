@@ -59,7 +59,7 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 			{
 				r = drand48();
 				x = ceil(-log(r) / lambda);
-				while (x > upper_bound)
+				while (x > upper_bound / 4)
 				{
 					r = drand48();
 					x = ceil(-log(r) / lambda);
