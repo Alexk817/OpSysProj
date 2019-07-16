@@ -42,7 +42,7 @@ std::vector<Process> generateProcesses(int num_processes, int seed, double lambd
 		int arrival = x;
 		r = drand48();
 		int num_bursts = floor(r * 100) + 1;
-		std::vector<std::pair<int, int> > burst_times;
+		std::vector<std::pair<int, int>> burst_times;
 		for (int j = 0; j < num_bursts; j++)
 		{
 			std::pair<int, int> temp_pair;
@@ -185,6 +185,21 @@ int main(int argc, char const *argv[])
 		}
 	}
 	std::vector<double> res_RR = RR(processes, time_context_switch, time_slice, rr_add);
+	//SRT
+	processes = generateProcesses(num_processes, seed, lambda, upper_bound, alpha);
+	for (int i = 0; i < num_processes; i++)
+	{
+		if (processes[i].CPU_bursts.size() > 1)
+		{
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU bursts (tau " << processes[i].tau << "ms)\n";
+		}
+		else
+		{
+			std::cout << "Process " << processes[i].name << " [NEW] (arrival time " << processes[i].arrival << " ms) " << processes[i].CPU_bursts.size() << " CPU burst (tau " << processes[i].tau << "ms)\n";
+		}
+	}
+	std::vector<double> res_SIO = SIO(processes, time_context_switch);
+	std::cout << "\n";
 	// Outputting to the simout.txt file
 	std::ofstream simout;
 	simout.open("simout.txt");
@@ -193,6 +208,7 @@ int main(int argc, char const *argv[])
 	finalOutput(simout, res_SJF, "SJF");
 	finalOutput(simout, res_SRT, "SRT");
 	finalOutput(simout, res_RR, "RR");
+	finalOutput(simout, res_SIO, "SIO");
 	simout.close();
 
 	return EXIT_SUCCESS;
