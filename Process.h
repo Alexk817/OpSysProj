@@ -30,6 +30,8 @@ public:
     double alpha;
     bool preempted;
     int working_tau;
+    int SIO_tau;
+    int SIO_next_tau;
 };
 
 #endif
